@@ -1,0 +1,22 @@
+{
+  "dev_28": {
+    "solution": "<think>\nThe question asks for the place of death of Anastasia of Serbia's husband, which was Stephen Uroš IV Dušan. The previous attempt confirmed that he died in Hilandar. Let's verify this again and ensure we have the correct answer.\n</think>\n<search>place of death of Stephen Uroš IV Dušan</search>\n<information>\nStephen Uroš IV Dušan, the husband of Anastasia of Serbia, died in Hilandar.\n</information>\n<think>\nThe information clearly states that the place of death of Stephen Uroš IV Dušan is Hilandar. The previous attempts have consistently provided this information. Let's ensure the answer is formatted correctly.\n</think>\n<answer>Hilandar</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Hilandar",
+      "ground_truth": [
+        "Hilandar",
+        "Helandar",
+        "Manastir Hilandar",
+        "Hilandar Monastery",
+        "Hilandariu",
+        "Hilendar",
+        "Χιλανδαρίου"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

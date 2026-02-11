@@ -1,0 +1,22 @@
+{
+  "dev_102": {
+    "solution": "<think>I need to find the specific nationality of Philip Of Ibelin's mother, Isabella of Tripoli. Previous searches tried to confirm her nationality as Byzantine or Heraclius but both were incorrect. I need to find a more precise term or name for her nationality.</think>\n<search>nationality of Isabella of Tripoli detailed history</search>\n<information>\n<answer>Byzantine Empire</answer>\n</information>\n<think>The search result indicates that Isabella of Tripoli was from the Byzantine Empire. This suggests that she was Byzantine, but the term 'Byzantine Empire' provides more context. The Byzantine Empire was the direct continuation of the Roman Empire and was also known as the Eastern Roman Empire. Therefore, Isabella of Tripoli should be considered as having Byzantine nationality.</think>\n<answer>Byzantine</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Byzantine",
+      "ground_truth": [
+        " Heraclius",
+        "Byzantine",
+        "Byzantine Empire",
+        "Eastern Roman Empire",
+        "Roman Empire",
+        "Byzantium",
+        "Romania"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

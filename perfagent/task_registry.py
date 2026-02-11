@@ -29,6 +29,7 @@ _TASK_RUNNERS: dict[str, str] = {
     "effibench": "perfagent.tasks.effibench.EffiBenchRunner",
     "livecodebench": "perfagent.tasks.livecodebench.LiveCodeBenchRunner",
     "aime": "perfagent.tasks.aime.AIMERunner",
+    "search_r1": "perfagent.tasks.search_r1.SearchR1Runner",
 }
 
 

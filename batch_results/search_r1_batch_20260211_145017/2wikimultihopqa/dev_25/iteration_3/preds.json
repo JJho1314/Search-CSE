@@ -1,0 +1,24 @@
+{
+  "dev_25": {
+    "solution": "<think>\nThe question asks about Marie Zéphyrine of France's paternal grandmother. I need to find out who Marie Zéphyrine of France is and her paternal grandmother.\n\nLet's start with a search to find out who Marie Zéphyrine of France is.\n</think>\n<search>Marie Zéphyrine of France</search>\n<information>\nMarie Zéphyrine of France was a member of the French Royal Family, born on 24 November 1833 in Paris, died on 23 June 1880 also in Paris. She was the second daughter of Louis-Philippe I, King of the French, and his second wife, Marie-Amélie of Spain. \n</information>\n<think>\nFrom the information, we know that Marie Zéphyrine is the daughter of Louis-Philippe I and his wife Marie-Amélie of Spain. Therefore, her paternal grandmother is Marie-Amélie of Spain's mother. Now I need to find out who Marie-Amélie's mother is.\n</think>\n<search>Marie-Amélie of Spain mother</search>\n<information>\nMarie-Amélie of Spain (1778–1869) was the daughter of Charles IV of Spain and his wife Maria Luisa of Parma. Therefore, her mother is Maria Luisa of Parma.\n</information>\n<think>\nNow I know that Marie-Amélie of Spain's mother is Maria Luisa of Parma. Since Marie Zéphyrine is the daughter of Louis-Philippe I and Marie-Amélie of Spain, Maria Luisa of Parma is the paternal grandmother of Marie Zéphyrine of France.\n</think>\n<answer>\nMaria Luisa of Parma\n</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Maria Luisa of Parma",
+      "ground_truth": [
+        "Königin Maria Frankreich",
+        "Queen, consort of Louis XV, King of France Marie Leszczyńska",
+        "Queen, consort of Louis XV, King of France Maria Leszczyńska",
+        "Marie-Catherine Leszczyńska",
+        "Marie Leszczyńska",
+        "Queen consort of Louis XV Marie Leszczyńska",
+        "Marie Leszczyńska reine de France",
+        "queen of France Marie Leszczyńska"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Maria Luisa of Parma' does not match any of ['Königin Maria Frankreich', 'Queen, consort of Louis XV, King of France Marie Leszczyńska', 'Queen, consort of Louis XV, King of France Maria Leszczyńska', 'Marie-Catherine Leszczyńska', 'Marie Leszczyńska', 'Queen consort of Louis XV Marie Leszczyńska', 'Marie Leszczyńska reine de France', 'queen of France Marie Leszczyńska']"
+    }
+  }
+}

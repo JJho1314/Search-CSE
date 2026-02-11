@@ -1,0 +1,24 @@
+{
+  "instance_id": "dev_28",
+  "success": true,
+  "solution": "<think>\nThe question asks for the place of death of Anastasia of Serbia's husband, Stephen Uroš IV Dušan. I need to confirm the place of his death. The previous searches mentioned Hilandar, so I will verify this information again.\n</think>\n<search>place of death of Stephen Uroš IV Dušan</search>\n<information>\nStephen Uroš IV Dušan, the husband of Anastasia of Serbia, died in Hilandar.\n</information>\n<think>\nThe search confirms that Stephen Uroš IV Dušan died in Hilandar. The term Hilandar should be correct as it is the name of a monastery where he is believed to have passed away.\n</think>\n<answer>Hilandar</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Hilandar",
+    "ground_truth": [
+      "Hilandar",
+      "Helandar",
+      "Manastir Hilandar",
+      "Hilandar Monastery",
+      "Hilandariu",
+      "Hilendar",
+      "Χιλανδαρίου"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_28/iteration_12/dev_28.traj",
+  "error": null
+}

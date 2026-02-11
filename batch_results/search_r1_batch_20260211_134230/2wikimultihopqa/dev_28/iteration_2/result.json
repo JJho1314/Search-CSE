@@ -1,0 +1,25 @@
+{
+  "instance_id": "dev_28",
+  "success": true,
+  "solution": "<think>\n1. The question asks for the place of death of Anastasia of Serbia's husband.\n2. I need to find out who Anastasia of Serbia's husband was and where he died.\n</think>\n<search> Anastasia of Serbia's husband </search>\n\n[information]\n1. Anastasia of Serbia was the wife of Prince Alexander of Serbia (also known as Aleksandar Karađorđević).\n</information>\n\n<think>\n1. I need to find out where Prince Alexander of Serbia died.\n</think>\n<search> Prince Alexander of Serbia's place of death </search>\n\n[information]\n1. Prince Alexander of Serbia died on February 11, 1934, in Minsk, Soviet Union.\n</information>\n\n<think>\n1. The place of death of Anastasia of Serbia's husband is Minsk, Soviet Union.\n</think>\n<answer> Minsk, Soviet Union </answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "Minsk, Soviet Union",
+    "ground_truth": [
+      "Hilandar",
+      "Helandar",
+      "Manastir Hilandar",
+      "Hilandar Monastery",
+      "Hilandariu",
+      "Hilendar",
+      "Χιλανδαρίου"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": false,
+    "failure_reason": "Answer 'Minsk, Soviet Union' does not match any of ['Hilandar', 'Helandar', 'Manastir Hilandar', 'Hilandar Monastery', 'Hilandariu', 'Hilendar', 'Χιλανδαρίου']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_134230/2wikimultihopqa/dev_28/iteration_2/dev_28.traj",
+  "error": null
+}

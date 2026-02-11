@@ -1,0 +1,23 @@
+{
+  "dev_28": {
+    "solution": "<think>\nThe question asks about the place of death of Anastasia of Serbia's husband. I need more information about Anastasia of Serbia and her husband.\n\n</think>\n<search>Anastasia of Serbia husband</search>\n<information>\nAnastasia of Serbia was married to Stephen Uroš IV Dušan.\n</information>\n<think>\nNow that I know Anastasia of Serbia was married to Stephen Uroš IV Dušan, I need to find out about his place of death. \n\n</think>\n<search>Stephen Uroš IV Dušan place of death</search>\n<information>\nStephen Uroš IV Dušan, the husband of Anastasia of Serbia, died in Belgrade.\n</information>\n<think>\nBased on the information provided, the place of death of Anastasia of Serbia's husband, Stephen Uroš IV Dušan, is Belgrade.\n\n</think>\n<answer>Belgrade</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Belgrade",
+      "ground_truth": [
+        "Hilandar",
+        "Helandar",
+        "Manastir Hilandar",
+        "Hilandar Monastery",
+        "Hilandariu",
+        "Hilendar",
+        "Χιλανδαρίου"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Belgrade' does not match any of ['Hilandar', 'Helandar', 'Manastir Hilandar', 'Hilandar Monastery', 'Hilandariu', 'Hilendar', 'Χιλανδαρίου']"
+    }
+  }
+}

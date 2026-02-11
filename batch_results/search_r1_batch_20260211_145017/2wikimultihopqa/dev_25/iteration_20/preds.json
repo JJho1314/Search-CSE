@@ -1,0 +1,23 @@
+{
+  "dev_25": {
+    "solution": "<think>\nThe question asks about Marie Zéphyrine of France's paternal grandmother. I know that Marie Zéphyrine of France is a French princess, and her father is Louis Antoine, Duke of Angoulême. I need to find out who his mother is, as she will be the paternal grandmother of Marie Zéphyrine of France.\n</think>\n<search>paternal grandmother of Marie Zéphyrine of France</search>\n<information>\nMarie Zéphyrine of France's paternal grandmother was Marie Leszczyńska.\n</information>\n<think>\nThe search result clearly states that Marie Zéphyrine of France's paternal grandmother is Marie Leszczyńska. This is the correct answer based on the information provided.\n</think>\n<answer>Marie Leszczyńska</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Marie Leszczyńska",
+      "ground_truth": [
+        "Königin Maria Frankreich",
+        "Queen, consort of Louis XV, King of France Marie Leszczyńska",
+        "Queen, consort of Louis XV, King of France Maria Leszczyńska",
+        "Marie-Catherine Leszczyńska",
+        "Marie Leszczyńska",
+        "Queen consort of Louis XV Marie Leszczyńska",
+        "Marie Leszczyńska reine de France",
+        "queen of France Marie Leszczyńska"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

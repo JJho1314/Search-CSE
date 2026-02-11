@@ -114,4 +114,5 @@ def build_operator_context(se_cfg: SEPerfRunSEConfig, step: StepConfig) -> Opera
         model_config=se_cfg.model.to_dict(),
         prompt_config=pc,
         selection_mode=step.selection_mode or "weighted",
+        metric_higher_is_better=se_cfg.metric_higher_is_better,
     )

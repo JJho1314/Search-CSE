@@ -1,0 +1,22 @@
+{
+  "dev_28": {
+    "solution": "<think>\nThe question asks for the place of death of Anastasia of Serbia's husband, Stephen Uroš IV Dušan. From the previous information, it was mentioned that he died in Hilandar on Mount Athos, Greece. Since the previous answer was wrong, I need to verify if there is any specific place within Hilandar or any other location mentioned for his death.\n</think>\n<search>place of death of Stephen Uroš IV Dušan</search>\n<information>\n<ol>\n<li>Stephen Uroš IV Dušan died in Hilandar, a monastery on Mount Athos, Greece.</li>\n</ol>\n</information>\n<think>\nThe search confirms that Stephen Uroš IV Dušan died in Hilandar, a monastery on Mount Athos, Greece. There is no mention of any specific sub-location within Hilandar. Therefore, the place of death is Hilandar Monastery.\n</think>\n<answer>Hilandar Monastery</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Hilandar Monastery",
+      "ground_truth": [
+        "Hilandar",
+        "Helandar",
+        "Manastir Hilandar",
+        "Hilandar Monastery",
+        "Hilandariu",
+        "Hilendar",
+        "Χιλανδαρίου"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

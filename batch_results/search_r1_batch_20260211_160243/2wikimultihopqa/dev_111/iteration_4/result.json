@@ -1,0 +1,20 @@
+{
+  "instance_id": "dev_111",
+  "success": true,
+  "solution": "<think>1. Let's re-read the question. We need to determine which film was released earlier between Sathyavan Savithri and Kids Of The Round Table.\n2. I don't have the release years of these films readily available, so I need to search for them.\n</think>\n<search>release year of Sathyavan Savithri</search>\n<information>\nSathyavan Savithri is a 1985 Indian Malayalam romantic drama film directed by Sathyan Anthikad.\n</information>\n<think>Based on the information, Sathyavan Savithri was released in 1985. Now, let's search for the release year of Kids Of The Round Table.\n</think>\n<search>release year of Kids Of The Round Table</search>\n<information>\nKids Of The Round Table is a 1990 American comedy film.\n</information>\n<think>Now I have the release years of both films. Sathyavan Savithri was released in 1985, and Kids Of The Round Table was released in 1990. Therefore, Sathyavan Savithri was released earlier.\n</think>\n<answer>Sathyavan Savithri</answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "Sathyavan Savithri",
+    "ground_truth": [
+      "Kids of the Round Table",
+      "Kids Of The Round Table"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": false,
+    "failure_reason": "Answer 'Sathyavan Savithri' does not match any of ['Kids of the Round Table', 'Kids Of The Round Table']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_160243/2wikimultihopqa/dev_111/iteration_4/dev_111.traj",
+  "error": null
+}

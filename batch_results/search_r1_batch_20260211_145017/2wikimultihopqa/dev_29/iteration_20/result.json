@@ -1,0 +1,18 @@
+{
+  "instance_id": "dev_29",
+  "success": true,
+  "solution": "<think>\nThe question asks if \"Fire In Hell\" and \"The Tiger: An Old Hunter's Tale\" are from the same country. I need to find the country of origin for each book separately.\n</think>\n<search>country of origin Fire In Hell book</search>\n<information>\n<![CDATA[\n1. Fire in Hell is a novel written by American author Peter Straub.\n2. Peter Straub is from the United States.\n]]\n</information>\n<think>\n\"Fire In Hell\" is from the United States as it was written by Peter Straub who is from the United States.\n</think>\n<search>country of origin The Tiger: An Old Hunter's Tale book</search>\n<information>\n<![CDATA[\n1. The Tiger: An Old Hunter's Tale is a book written by American author Peter Matthiessen.\n2. Peter Matthiessen is from the United States.\n]]\n</information>\n<think>\n\"Fire In Hell\" and \"The Tiger: An Old Hunter's Tale\" are both from the United States as they were written by American authors.\n</think>\n<answer>Yes</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Yes",
+    "ground_truth": [
+      "yes"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_29/iteration_20/dev_29.traj",
+  "error": null
+}

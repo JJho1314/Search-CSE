@@ -1,0 +1,23 @@
+{
+  "dev_28": {
+    "solution": "<think>\nThe question asks for the place of death of Anastasia of Serbia's husband. We need to find out who her husband was and where he died. Since we don't have this information, we will need to search for it.\n</think>\n<search>Anastasia of Serbia husband</search>\n<information>\nAnastasia of Serbia was married to Stephen Nemanja, the first ruler of the Nemanjić dynasty of Serbia.\n</information>\n<think>\nNow that we know Anastasia of Serbia's husband was Stephen Nemanja, we need to find out where he died. We will search for Stephen Nemanja's place of death.\n</think>\n<search>Stephen Nemanja place of death</search>\n<information>\nStephen Nemanja abdicated and became a monk at the Monastery of Hilandar on Mount Athos, where he died.\n</information>\n<think>\nBased on the information found, Stephen Nemanja, the husband of Anastasia of Serbia, died at the Monastery of Hilandar on Mount Athos.\n</think>\n<answer>Monastery of Hilandar on Mount Athos</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Monastery of Hilandar on Mount Athos",
+      "ground_truth": [
+        "Hilandar",
+        "Helandar",
+        "Manastir Hilandar",
+        "Hilandar Monastery",
+        "Hilandariu",
+        "Hilendar",
+        "Χιλανδαρίου"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": true,
+      "failure_reason": "Answer 'Monastery of Hilandar on Mount Athos' does not match any of ['Hilandar', 'Helandar', 'Manastir Hilandar', 'Hilandar Monastery', 'Hilandariu', 'Hilendar', 'Χιλανδαρίου']"
+    }
+  }
+}

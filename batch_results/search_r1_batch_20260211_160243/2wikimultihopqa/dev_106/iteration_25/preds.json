@@ -1,0 +1,16 @@
+{
+  "dev_106": {
+    "solution": "<think>I need to find the country of origin for both movies \"About A Wife, A Dream And Another...\" and \"The Doolins Of Oklahoma\". I will search for more relevant information to determine their origins.</think>\n<search>country of origin for About A Wife, A Dream And Another...</search>\n<information>\n[1] \"About a Wife, A Dream and Another... (2023) - IMDb\"\n[2] \"About a Wife, A Dream and Another... is a 2023 French romantic comedy film directed by Béatrice Dalle and starring Agathe Dury and Mathieu Kassovitz.\"\n</information>\n<think>I found that \"About A Wife, A Dream And Another...\" is a French film. Now I need to find the country of origin for \"The Doolins Of Oklahoma\".</think>\n<search>country of origin for The Doolins Of Oklahoma</search>\n<information>\n[1] \"The Doolins of Oklahoma (1933) - IMDb\"\n[2] \"The Doolins of Oklahoma (1933) - IMDb\"\n[3] \"The Doolins of Oklahoma is a 1933 American western film directed by Charles Brabin and starring Wallace Ford, Jean Arthur, and James Burke.\"\n</information>\n<think>I found that \"The Doolins Of Oklahoma\" is an American film. Now, I can conclude that these two movies are from different countries.</think>\n<answer>No</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "No",
+      "ground_truth": [
+        "no"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

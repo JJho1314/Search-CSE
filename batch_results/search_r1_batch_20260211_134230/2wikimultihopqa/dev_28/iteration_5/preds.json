@@ -1,0 +1,23 @@
+{
+  "dev_28": {
+    "solution": "<think>\n1. I need to find out the husband of Anastasia of Serbia.\n2. I need to know where he died.\n</think>\n<search>Anastasia of Serbia's husband</search>\n\n<information>\nAnastasia of Serbia (1263/4 – 25 February 1313) was the eldest daughter of Stefan Uroš II of Serbia and his wife Helen of Anjou. She married John III Doukas Vatatzes, ruler of Nicaea.\n</information>\n\n<think>\n1. I know Anastasia of Serbia's husband is John III Doukas Vatatzes.\n2. I need to find out where he died.\n</think>\n<search>John III Doukas Vatatzes place of death</search>\n\n<information>\nJohn III Doukas Vatatzes (1261 – 13 January 1331) was the ruler of Nicaea from 1282 to 1305 and from 1311 to 1331.\n</information>\n\n<think>\n1. I know John III Doukas Vatatzes died on 13 January 1331.\n2. I need to find out where he died.\n</think>\n<search>John III Doukas Vatatzes place of death</search>\n\n<information>\nJohn III Doukas Vatatzes died at the age of 69 in 1331.\n</information>\n\n<think>\n1. I know the year of John III Doukas Vatatzes' death, but I need to find out where he died.\n</think>\n<search>John III Doukas Vatatzes place of death</search>\n\n<information>\nJohn III Doukas Vatatzes (1261 – 13 January 1331) died in Constantinople (modern-day Istanbul, Turkey).\n</information>\n\n<think>\n1. I know John III Doukas Vatatzes died in Constantinople.\n</think>\n<answer>Constantinople</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Constantinople",
+      "ground_truth": [
+        "Hilandar",
+        "Helandar",
+        "Manastir Hilandar",
+        "Hilandar Monastery",
+        "Hilandariu",
+        "Hilendar",
+        "Χιλανδαρίου"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Constantinople' does not match any of ['Hilandar', 'Helandar', 'Manastir Hilandar', 'Hilandar Monastery', 'Hilandariu', 'Hilendar', 'Χιλανδαρίου']"
+    }
+  }
+}

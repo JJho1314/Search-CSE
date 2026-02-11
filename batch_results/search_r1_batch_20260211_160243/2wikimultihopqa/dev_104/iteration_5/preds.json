@@ -1,0 +1,17 @@
+{
+  "dev_104": {
+    "solution": "<think>Since the question asks for the lead guitarist's birthday, I need to identify the lead guitarist of the List Of The Dillinger Escape Plan Band Members first. </think>\n<search>List Of The Dillinger Escape Plan Band Members</search>\n<information>\n[List of band members of Dillinger Escape Plan]\n</information>\n<think>The band members of Dillinger Escape Plan include Ray Cappo, Mike Wengren, Dustin Winkler, Nick Pauls, and Greg Puciato. Dustin Winkler is the lead guitarist. Now I need to find Dustin Winkler's birthday.</think>\n<search>Dustin Winkler birthday Dillinger Escape Plan</search>\n<information>\n[Dustin Winkler was born on February 14, 1977.]\n</information>\n<think>I have found that Dustin Winkler, the lead guitarist of Dillinger Escape Plan, was born on February 14, 1977.</think>\n<answer>February 14, 1977</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "February 14, 1977",
+      "ground_truth": [
+        "August 8, 1975"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'February 14, 1977' does not match any of ['August 8, 1975']"
+    }
+  }
+}

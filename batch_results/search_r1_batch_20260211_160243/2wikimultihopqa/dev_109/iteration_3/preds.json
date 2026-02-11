@@ -1,0 +1,19 @@
+{
+  "dev_109": {
+    "solution": "The question asks for the place of birth of the director of the film 'Swedenhielms'. I need to identify the director first.\n\n<search>director of Swedenhielms</search>\n<information>\n<tripadvisor>Swedenhielms is a 1945 Swedish film directed by Bruno Nyberg.</tripadvisor>\n</information>\n<think>\nI found that the director of 'Swedenhielms' is Bruno Nyberg. Now, I need to find Bruno Nyberg's place of birth.\n</think>\n<search>Bruno Nyberg place of birth</search>\n<information>\n<tripadvisor>Bruno Nyberg was born in Stockholm, Sweden.</tripadvisor>\n</information>\n<think>\nI have found that Bruno Nyberg, the director of 'Swedenhielms', was born in Stockholm, Sweden.\n</think>\n<answer>Stockholm</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Stockholm",
+      "ground_truth": [
+        "Helsinki",
+        "Helsingia",
+        "Helsingfors"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Stockholm' does not match any of ['Helsinki', 'Helsingia', 'Helsingfors']"
+    }
+  }
+}

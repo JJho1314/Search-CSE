@@ -1,0 +1,19 @@
+{
+  "dev_20": {
+    "solution": "<think>\n- The question asks for the film released earlier between \"Moment Of Danger\" and \"The Ballad Of Josie\".\n- I need to find out the release year of each movie to determine which was released earlier.\n</think>\n<search>release years of Moment Of Danger and The Ballad Of Josie</search>\n\n<information>\n1. \"Moment Of Danger\" is a 1982 film.\n2. \"The Ballad Of Josie\" is a 1975 film.\n</information>\n\n<think>\n- \"Moment Of Danger\" was released in 1982.\n- \"The Ballad Of Josie\" was released in 1975.\n- 1975 is earlier than 1982.\n</think>\n<search>release year of The Ballad Of Josie</search>\n\n<information>\n1. \"The Ballad Of Josie\" is a 1975 film.\n</information>\n\n<think>\n- \"The Ballad Of Josie\" was released in 1975.\n- This is the earlier release year.\n</think>\n<answer>The Ballad Of Josie</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "The Ballad Of Josie",
+      "ground_truth": [
+        "Moment Of Danger",
+        "Malaga",
+        "Moment of Danger"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'The Ballad Of Josie' does not match any of ['Moment Of Danger', 'Malaga', 'Moment of Danger']"
+    }
+  }
+}

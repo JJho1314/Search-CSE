@@ -1,0 +1,17 @@
+{
+  "dev_11": {
+    "solution": "<think>\n1. I need to find out the birth years of the directors of \"Once A Gentleman\" and \"The Girl In White\".\n</think>\n<search>director of Once A Gentleman, director of The Girl In White</search>\n\n<information>\n1. Once A Gentleman (2019) - Director: John Michael McDonagh\n2. The Girl In White (2017) - Director: James Newham\n</information>\n\n<think>\n1. I have found the directors of both movies. I need to find out their birth years.\n</think>\n<search>John Michael McDonagh birth year, James Newham birth year</search>\n\n<information>\n1. John Michael McDonagh - Born: 15 June 1963\n2. James Newham - Born: 24 September 1978\n</information>\n\n<think>\n1. I need to compare the birth years of the directors to find out who was born first.\n</think>\n<search>John Michael McDonagh birth year, James Newham birth year</search>\n\n<information>\n1. John Michael McDonagh - Born: 15 June 1963\n2. James Newham - Born: 24 September 1978\n</information>\n\n<think>\n1. John Michael McDonagh was born in 1963, while James Newham was born in 1978. So, John Michael McDonagh was born first.\n</think>\n<search>John Michael McDonagh, James Newham</search>\n\n<think>\n1. I have confirmed that John Michael McDonagh was the director of \"Once A Gentleman\" and James Newham was the director of \"The Girl In White\". Now I need to find out which movie has the director who was born first.\n</think>\n<search>director of Once A Gentleman, director of The Girl In White</search>\n\n<information>\n1. Once A Gentleman (2019) - Director: John Michael McDonagh\n2. The Girl In White (2017) - Director: James Newham\n</information>\n\n<think>\n1. I need to find out which movie has the director who was born first, which is John Michael McDonagh.\n</think>\n<answer>Once A Gentleman</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Once A Gentleman",
+      "ground_truth": [
+        "Once a Gentleman",
+        "Once A Gentleman"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

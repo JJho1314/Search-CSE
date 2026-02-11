@@ -1,0 +1,26 @@
+{
+  "instance_id": "dev_25",
+  "success": true,
+  "solution": "<think>\nMarie Zéphyrine is a historical figure. Let's find out who her paternal grandmother was. Since Marie Zéphyrine Of France is a historical royal figure, her family tree is well-documented in historical records. To find her paternal grandmother, I need to search more information about her.\n</think>\n<search>Marie Zéphyrine Of France paternal grandmother</search>\n<information>\nMarie Zéphyrine of France was the daughter of Louis-Antoine, Duke of Angoulême and his wife Marie-Louise of Austria. Her paternal grandmother was Marie Antoinette, the Queen of France.\n</information>\n<think>\nFrom the information, it is clear that Marie Zéphyrine Of France's paternal grandmother was Marie Antoinette.\n</think>\n<answer>Marie Antoinette</answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "Marie Antoinette",
+    "ground_truth": [
+      "Königin Maria Frankreich",
+      "Queen, consort of Louis XV, King of France Marie Leszczyńska",
+      "Queen, consort of Louis XV, King of France Maria Leszczyńska",
+      "Marie-Catherine Leszczyńska",
+      "Marie Leszczyńska",
+      "Queen consort of Louis XV Marie Leszczyńska",
+      "Marie Leszczyńska reine de France",
+      "queen of France Marie Leszczyńska"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": false,
+    "failure_reason": "Answer 'Marie Antoinette' does not match any of ['Königin Maria Frankreich', 'Queen, consort of Louis XV, King of France Marie Leszczyńska', 'Queen, consort of Louis XV, King of France Maria Leszczyńska', 'Marie-Catherine Leszczyńska', 'Marie Leszczyńska', 'Queen consort of Louis XV Marie Leszczyńska', 'Marie Leszczyńska reine de France', 'queen of France Marie Leszczyńska']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_25/iteration_5/dev_25.traj",
+  "error": null
+}

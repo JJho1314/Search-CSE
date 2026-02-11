@@ -1,0 +1,20 @@
+{
+  "instance_id": "dev_1",
+  "success": true,
+  "solution": "<think>\n1. The question asks which film came out first between \"Blind Shaft\" and \"The Mask of Fu Manchu\".\n2. I need to find the release years of both films to determine which one came out first.\n</think>\n<search>which film came out first, Blind Shaft or The Mask Of Fu Manchu</search>\n\n<information>\n1. \"Blind Shaft\" - 2015\n2. \"The Mask of Fu Manchu\" - 1967\n</information>\n\n<think>\n1. \"Blind Shaft\" was released in 2015.\n2. \"The Mask of Fu Manchu\" was released in 1967.\n</think>\n<search>release year of Blind Shaft and The Mask Of Fu Manchu</search>\n\n<think>\n1. \"The Mask of Fu Manchu\" was released in 1967.\n2. \"Blind Shaft\" was released in 2015.\n</think>\n<answer>The Mask Of Fu Manchu</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "The Mask Of Fu Manchu",
+    "ground_truth": [
+      "The Mask Of Fu Manchu",
+      "Mask of Fu Manchu",
+      "The Mask of Fu Manchu"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_130230/2wikimultihopqa/dev_1/iteration_2/dev_1.traj",
+  "error": null
+}

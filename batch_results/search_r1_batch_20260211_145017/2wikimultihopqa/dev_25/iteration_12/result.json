@@ -1,0 +1,25 @@
+{
+  "instance_id": "dev_25",
+  "success": true,
+  "solution": "<think>\nThe question asks about Marie Zéphyrine of France's paternal grandmother. We know that Louis Antoine, Duke of Angoulême is her father. We need to determine who his mother is, as she will be the paternal grandmother. Let's search for Louis Antoine, Duke of Angoulême's mother.\n</think>\n<search>Louis Antoine, Duke of Angoulême mother</search>\n<information>\nLouis Antoine, Duke of Angoulême was the son of Louis VIII of France and Blanche of Castile.\n</information>\n<think>\nThe search result indicates that Louis Antoine's mother is Blanche of Castile. However, we need to find out if Blanche of Castile is the paternal grandmother of Marie Zéphyrine of France. Since Louis VIII of France is the father of Louis Antoine, Blanche of Castile is Louis Antoine's mother, and hence the paternal grandmother of Marie Zéphyrine of France.\n\nBut, let's cross-check if there are any other names or additional information that might provide more clarity.\n</think>\n<search>paternal grandmother of Marie Zéphyrine of France</search>\n<information>\nMarie Zéphyrine of France's paternal grandmother was Marie Leszczyńska.\n</information>\n<think>\nThe search result clearly states that Marie Zéphyrine of France's paternal grandmother is Marie Leszczyńska. Therefore, the correct answer is Marie Leszczyńska.\n</think>\n<answer>Marie Leszczyńska</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Marie Leszczyńska",
+    "ground_truth": [
+      "Königin Maria Frankreich",
+      "Queen, consort of Louis XV, King of France Marie Leszczyńska",
+      "Queen, consort of Louis XV, King of France Maria Leszczyńska",
+      "Marie-Catherine Leszczyńska",
+      "Marie Leszczyńska",
+      "Queen consort of Louis XV Marie Leszczyńska",
+      "Marie Leszczyńska reine de France",
+      "queen of France Marie Leszczyńska"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_25/iteration_12/dev_25.traj",
+  "error": null
+}

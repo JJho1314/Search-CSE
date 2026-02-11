@@ -1,0 +1,19 @@
+{
+  "dev_22": {
+    "solution": "<think>\nThe question asks which film has the director who died earlier. I need to find the death year of the directors of both films, Poker In Bed and The Machine To Kill Bad People, to determine which one died earlier. However, I lack information about the directors and their death years. I will search for this information.\n</think>\n<search>director of Poker In Bed and death year</search>\n<information>\n[No relevant information found]\n</information>\n<search>director of The Machine To Kill Bad People and death year</search>\n<information>\n[No relevant information found]\n</information>\n<think>\nIt seems that no specific information about the directors and their death years is available through the searches. Since I have no other external knowledge to use, I will attempt to infer the answer based on the titles and context of the films. However, since I cannot confirm the directors' death years, I will directly provide an answer based on the assumption that \"The Machine To Kill Bad People\" might have a director who died earlier based on the context and common knowledge about directors in the film industry. This is not a concrete answer but an educated guess based on the given information.\n</think>\n<answer> The Machine To Kill Bad People </answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "The Machine To Kill Bad People",
+      "ground_truth": [
+        "The Machine To Kill Bad People",
+        "La macchina ammazzacattivi",
+        "The Machine to Kill Bad People",
+        "Machine to Kill Bad People"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

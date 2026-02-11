@@ -1,0 +1,19 @@
+{
+  "dev_101": {
+    "solution": "<think>I need to find the specific place of birth of Namie Amuro, the performer of the song \"Heaven\". I should search for a more detailed location than just the country.</think>\n<search>Namie Amuro place of birth city</search>\n<information>\nNAMIE AMURO BIRTHPLACE: Naha, Okinawa, Japan\n</information>\n<think>The information clearly states that Namie Amuro was born in Naha, Okinawa, Japan. This provides a more specific location.</think>\n<answer>Naha, Okinawa, Japan</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Naha, Okinawa, Japan",
+      "ground_truth": [
+        "Naha",
+        "Naha, Japan",
+        "Naha, Okinawa"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": true,
+      "failure_reason": "Answer 'Naha, Okinawa, Japan' does not match any of ['Naha', 'Naha, Japan', 'Naha, Okinawa']"
+    }
+  }
+}

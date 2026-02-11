@@ -1,0 +1,492 @@
+[
+  {
+    "instance_id": "dev_10",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_10.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 1.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_11",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_11.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 1.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_12",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_12.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 1.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_13",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_13.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 0.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_14",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_14.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 0.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_15",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_15.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 0.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_16",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_16.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 1.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_17",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_17.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 0.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_18",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_18.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 0.0,
+    "error": null
+  },
+  {
+    "instance_id": "dev_19",
+    "instance_path": "instances/search_r1_2wikimultihopqa/dev_19.json",
+    "data_source": "2wikimultihopqa",
+    "iterations": [
+      {
+        "iteration": 1,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 2,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 3,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 4,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 5,
+        "metric": 1.0,
+        "success": true
+      },
+      {
+        "iteration": 6,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 7,
+        "metric": 0.0,
+        "success": true
+      },
+      {
+        "iteration": 8,
+        "metric": 0.0,
+        "success": true
+      }
+    ],
+    "best_metric": 1.0,
+    "error": null
+  }
+]

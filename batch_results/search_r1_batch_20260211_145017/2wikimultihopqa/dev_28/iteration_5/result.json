@@ -1,0 +1,25 @@
+{
+  "instance_id": "dev_28",
+  "success": true,
+  "solution": "<think> The question asks about the place of death of Anastasia of Serbia's husband. I need to find the name of her husband and then the place where he died. </think>\n<search>Anastasia of Serbia husband</search>\n<information>\nAnastasia of Serbia was married to Stephen Uroš III, also known as Stephen the Weak.\n</information>\n<think> Now I know that the husband of Anastasia of Serbia is Stephen Uroš III. I need to find the place of his death. </think>\n<search>Place of death of Stephen Uroš III</search>\n<information>\nStephen Uroš III died in 1321 in Maritsa.\n</information>\n<think> The place of death of Anastasia of Serbia's husband, Stephen Uroš III, is Maritsa. </think>\n<answer>Maritsa</answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "Maritsa",
+    "ground_truth": [
+      "Hilandar",
+      "Helandar",
+      "Manastir Hilandar",
+      "Hilandar Monastery",
+      "Hilandariu",
+      "Hilendar",
+      "Χιλανδαρίου"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": false,
+    "failure_reason": "Answer 'Maritsa' does not match any of ['Hilandar', 'Helandar', 'Manastir Hilandar', 'Hilandar Monastery', 'Hilandariu', 'Hilendar', 'Χιλανδαρίου']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_28/iteration_5/dev_28.traj",
+  "error": null
+}

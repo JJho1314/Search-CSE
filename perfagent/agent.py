@@ -286,6 +286,14 @@ class PerfAgent:
         runner = self._ensure_task_runner()
         instance_id = self._get_instance_id(instance_data)
 
+        # 注入 LLM client 到 TaskRunner（供 SearchR1Runner 的搜索循环使用）
+        if hasattr(runner, 'set_llm_client') and self.llm_client is not None:
+            runner.set_llm_client(
+                self.llm_client,
+                temperature=self.config.model.temperature,
+                max_tokens=self.config.model.max_output_tokens,
+            )
+
         # 初始化轨迹记录器
         trajectory = TrajectoryLogger(
             instance_id,

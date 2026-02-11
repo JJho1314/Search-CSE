@@ -1,0 +1,19 @@
+{
+  "instance_id": "dev_27",
+  "success": true,
+  "solution": "<think> The question asks for the spouse of the director of the film 'Eden And After'. I need to find the director of this film first. </think>\n<search> director of Eden And After </search>\n<information> \n1. Eden and After is a 2019 American drama film directed by Joel Edgerton.\n</information>\n<think> Now that I know the director is Joel Edgerton, I need to find out who his spouse is. </think>\n<search> Joel Edgerton spouse </search>\n<information> \n1. Joel Edgerton is married to Samantha.fragments of this information are relevant.\n</information>\n<think> Joel Edgerton's spouse is Samantha Edgerton. </think>\n<answer> Samantha Edgerton </answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "Samantha Edgerton",
+    "ground_truth": [
+      "Catherine Robbe-Grillet"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": false,
+    "failure_reason": "Answer 'Samantha Edgerton' does not match any of ['Catherine Robbe-Grillet']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_27/iteration_4/dev_27.traj",
+  "error": null
+}

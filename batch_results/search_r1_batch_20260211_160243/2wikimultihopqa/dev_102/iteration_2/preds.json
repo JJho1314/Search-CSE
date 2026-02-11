@@ -1,0 +1,23 @@
+{
+  "dev_102": {
+    "solution": "<think>Philip Of Ibelin (1180–1227) is a historical figure. I need to find his mother's nationality. I will search for more information about Philip Of Ibelin and his family.</think>\n<search>Philip Of Ibelin family background</search>\n<information>\n Philip of Ibelin was a prominent nobleman in the Kingdom of Jerusalem during the Crusades. He was the son of Balian of Ibelin, who was a Crusader and a key figure in the history of the Kingdom of Jerusalem.\n</information>\n<think>From the information returned, there is no direct mention of Philip Of Ibelin's mother's nationality. I need to search specifically for information about his mother.</think>\n<search>Philip Of Ibelin mother nationality</search>\n<information>\n Information on Philip of Ibelin's mother, Sibylla of Jaffa, indicates she was from a noble family in Jaffa, though her exact nationality is not explicitly stated. However, considering her noble lineage and the context of the Kingdom of Jerusalem, it is likely she was of Syrian or Palestinian descent.\n</information>\n<think>The information suggests that Philip Of Ibelin's mother, Sibylla of Jaffa, likely had Syrian or Palestinian descent. Given the context of the Kingdom of Jerusalem, her nationality is most probably Syrian or Palestinian.</think>\n<answer>Syrian or Palestinian</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Syrian or Palestinian",
+      "ground_truth": [
+        " Heraclius",
+        "Byzantine",
+        "Byzantine Empire",
+        "Eastern Roman Empire",
+        "Roman Empire",
+        "Byzantium",
+        "Romania"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Syrian or Palestinian' does not match any of [' Heraclius', 'Byzantine', 'Byzantine Empire', 'Eastern Roman Empire', 'Roman Empire', 'Byzantium', 'Romania']"
+    }
+  }
+}

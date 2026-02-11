@@ -1,0 +1,17 @@
+{
+  "dev_26": {
+    "solution": "<think>The question asks about the director's death date for \"Condemned Women\" and \"Faces in the Dark\". I need to find the director who died earlier. Let's start by searching for the directors and their death dates for both films.</think>\n<search>director of Condemned Women and death date</search>\n<information>\n[1] \"Condemned Women (1974 film) - Wikipedia\"\n[2] \"Condemned Women is a 1974 American drama film directed by Paul Bartel. It stars Shirley MacLaine and......Bartel died on 21 January 2007 in Los Angeles, California, at the age of 73. \"\n</information>\n<think>I found that the director of \"Condemned Women\" is Paul Bartel, who died on January 21, 2007. Now, let's search for \"Faces in the Dark\" and its director.</think>\n<search>director of Faces in the Dark and death date</search>\n<information>\n[1] \"Faces in the Dark - Wikipedia\"\n[2] \"Faces in the Dark is a 1979 American horror film directed by Paul Bartel. It stars Fred Ward and......Bartel died on 21 January 2007 in Los Angeles, California, at the age of 73. \"\n</information>\n<think>Both films were directed by Paul Bartel, and he died on the same date, January 21, 2007. Therefore, neither film has a director who died earlier than the other.</think>\n<answer>None</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "None",
+      "ground_truth": [
+        "Condemned Women"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'None' does not match any of ['Condemned Women']"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "instance_id": "dev_25",
+  "success": true,
+  "solution": "<think>\nThe question asks about Marie Zéphyrine of France's paternal grandmother. My previous attempt wrongly concluded that her paternal grandmother was Marie Antoinette. However, I now know from the previous search that her paternal grandmother is Marie Leszczyńska. Let me verify this again to ensure there are no mistakes.\n</think>\n<search>paternal grandmother of Marie Zéphyrine of France</search>\n<information>\nMarie Zéphyrine of France's paternal grandmother was Marie Leszczyńska.\n</information>\n<think>\nThe information is clear and consistent. Marie Zéphyrine of France's paternal grandmother is indeed Marie Leszczyńska.\n</think>\n<answer>Marie Leszczyńska</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Marie Leszczyńska",
+    "ground_truth": [
+      "Königin Maria Frankreich",
+      "Queen, consort of Louis XV, King of France Marie Leszczyńska",
+      "Queen, consort of Louis XV, King of France Maria Leszczyńska",
+      "Marie-Catherine Leszczyńska",
+      "Marie Leszczyńska",
+      "Queen consort of Louis XV Marie Leszczyńska",
+      "Marie Leszczyńska reine de France",
+      "queen of France Marie Leszczyńska"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_25/iteration_18/dev_25.traj",
+  "error": null
+}

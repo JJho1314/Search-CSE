@@ -1,0 +1,18 @@
+{
+  "instance_id": "dev_26",
+  "success": true,
+  "solution": "### REASONING\n<think>\nI need to find out which film has the director who died earlier between 'Condemned Women' and 'Faces In The Dark'.\n</think>\n<search>director of Condemned Women and Faces In The Dark</search>\n\n### INFORMATION\n1. Condemned Women - 1961 film, directed by Jack Arnold.\n2. Faces in the Dark - 1962 film, directed by Roger Corman.\n\n<think>\nI need to find out the death dates of Jack Arnold and Roger Corman.\n</think>\n<search>death date of Jack Arnold and Roger Corman</search>\n\n### INFORMATION\n1. Jack Arnold - died on July 21, 1986.\n2. Roger Corman - died on October 14, 2019.\n\n<think>\nNow I need to compare the death dates to determine which director died earlier.\n</think>\n\n<think>\nJack Arnold died on July 21, 1986, and Roger Corman died on October 14, 2019.\n</think>\n\n<think>\nJack Arnold died earlier.\n</think>\n\n<answer>Condemned Women</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Condemned Women",
+    "ground_truth": [
+      "Condemned Women"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_134230/2wikimultihopqa/dev_26/iteration_14/dev_26.traj",
+  "error": null
+}

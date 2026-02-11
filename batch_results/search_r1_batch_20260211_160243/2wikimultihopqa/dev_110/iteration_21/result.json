@@ -1,0 +1,27 @@
+{
+  "instance_id": "dev_110",
+  "success": true,
+  "solution": "<think>Based on the previous attempts, I know that Jan Baptist Van Rensselaer's father was Pieter van Rensselaer, who was a member of the Dutch nobility. I need to find out more about Pieter van Rensselaer's origin.</think>\n<search>Pieter van Rensselaer origin</search>\n<information>\nPieter van Rensselaer was a Dutch nobleman who served as the patroon of Rensselaerswyck, a large land grant in what is now New York. Rensselaerswyck was a Dutch colony in the 17th century.\n</information>\n<think>The information clearly states that Pieter van Rensselaer was a Dutch nobleman. Therefore, he must be from the Netherlands.</think>\n<answer>Netherlands</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Netherlands",
+    "ground_truth": [
+      "Holland",
+      "the Netherlands",
+      "NED",
+      "Netherlands (after 1945)",
+      "Netherlands",
+      "NL",
+      "Nederland",
+      "🇳🇱",
+      "Dutch",
+      "nl"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_160243/2wikimultihopqa/dev_110/iteration_21/dev_110.traj",
+  "error": null
+}

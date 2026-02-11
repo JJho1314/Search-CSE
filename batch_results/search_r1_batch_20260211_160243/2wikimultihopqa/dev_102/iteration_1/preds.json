@@ -1,0 +1,23 @@
+{
+  "dev_102": {
+    "solution": "<think>Philip Of Ibelin (1180–1227) is mentioned. To find the nationality of his mother, I need to search for more information about Philip and his family.</think>\n<search>Philip Of Ibelin family history</search>\n<information>\n- Philip I of Ibelin was a prominent Crusader noble.\n- He was born in Ibelin, a feudal lordship in the Kingdom of Jerusalem.\n- His father was Balian of Ibelin.\n</information>\n<think>From the information, it seems Philip I of Ibelin was born in Ibelin, which is located in the Kingdom of Jerusalem. This suggests that Philip I of Ibelin, his father, was likely of Crusader noble origin. However, I still need to find information on his mother's nationality.</think>\n<search>Philip Of Ibelin mother nationality</search>\n<information>\n- Margaret of Montferrat was the mother of Baldwin IV of Jerusalem and Philip of Ibelin.\n- Margaret of Montferrat was a member of the Montferrat family and was born in Montferrat, a feudal lordship in the Kingdom of Jerusalem.\n</information>\n<think>Based on the new information, Philip Of Ibelin's mother, Margaret of Montferrat, was born in Montferrat, a feudal lordship in the Kingdom of Jerusalem. This means Margaret of Montferrat was of Crusader noble origin from the Montferrat family.</think>\n<answer>Crusader</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Crusader",
+      "ground_truth": [
+        " Heraclius",
+        "Byzantine",
+        "Byzantine Empire",
+        "Eastern Roman Empire",
+        "Roman Empire",
+        "Byzantium",
+        "Romania"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Crusader' does not match any of [' Heraclius', 'Byzantine', 'Byzantine Empire', 'Eastern Roman Empire', 'Roman Empire', 'Byzantium', 'Romania']"
+    }
+  }
+}

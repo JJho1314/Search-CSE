@@ -1,0 +1,16 @@
+{
+  "dev_29": {
+    "solution": "<think>\nThe question asks if Fire In Hell and The Tiger: An Old Hunter's Tale are from the same country. I need to find the country of origin for each book. Let's start by searching for the author of Fire In Hell.\n</think>\n<search>author of Fire In Hell book</search>\n<information>\n<![CDATA[\n1. Fire In Hell is a novel written by American author Peter Straub.\n2. Peter Straub is an American author.\n3. Peter Straub was born in New York City.\n]]\n</information>\n<think>\nFire In Hell was written by Peter Straub, who is an American author. Next, I need to find the author of The Tiger: An Old Hunter's Tale.\n</think>\n<search>author of The Tiger: An Old Hunter's Tale book</search>\n<information>\n<![CDATA[\n1. The Tiger: An Old Hunter's Tale is a book written by American author Peter Matthiessen.\n2. Peter Matthiessen is an American author.\n3. Peter Matthiessen was born in New York City.\n]]\n</information>\n<think>\nThe Tiger: An Old Hunter's Tale was written by Peter Matthiessen, who is also an American author. Since both books are written by American authors, they are from the same country.\n</think>\n<answer>Yes</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Yes",
+      "ground_truth": [
+        "yes"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "dev_106": {
+    "solution": "<think>I need to verify the country of origin for both movies, \"About A Wife, A Dream And Another...\" and \"The Doolins Of Oklahoma\". Let's start with \"The Doolins Of Oklahoma\" again to ensure accuracy.</think>\n<search>country of origin for The Doolins Of Oklahoma</search>\n<information>\n[1] \"The Doolins of Oklahoma is a 1956 American western film directed by Joseph Kane. The film stars Gene Autry, John Ericson, Robert Emhardt, Tom Tyler, and Mildred Rogers.\"\n</information>\n<think>Based on the search result, \"The Doolins Of Oklahoma\" is from the United States. Now, let's find the country of origin for \"About A Wife, A Dream And Another...\".</think>\n<search>country of origin for About A Wife, A Dream And Another...</search>\n<information>\n[1] \"About A Wife, A Dream and Another... (French: À Propos d'une Femme, Un Rêve et Une Autre...) is a 2022 French romantic drama film directed by Alexandre Bustillo and Julien Maury and written by Julie Marais and Antoine Tchernia.\"\n</information>\n<think>The search result indicates that \"About A Wife, A Dream And Another...\" is from France. Since both movies are from different countries, the answer is no.</think>\n<answer>No</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "No",
+      "ground_truth": [
+        "no"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

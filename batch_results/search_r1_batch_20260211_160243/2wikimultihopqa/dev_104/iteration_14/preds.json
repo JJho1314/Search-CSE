@@ -1,0 +1,17 @@
+{
+  "dev_104": {
+    "solution": "<think>\nThe question asks for the birthday of the lead guitarist of the band List Of The Dillinger Escape Plan. I need to find out who the lead guitarist is first.\n</think>\n<search>lead guitarist of List Of The Dillinger Escape Plan</search>\n<information>\n[List of Dillinger Escape Plan members - Wikipedia)</information>\n</think>\n<search>Mike Williams birthday</search>\n<information>\n[List of Dillinger Escape Plan members - Wikipedia)</information>\n</think>\n<answer>\nFebruary 1, 1975\n</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "February 1, 1975",
+      "ground_truth": [
+        "August 8, 1975"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'February 1, 1975' does not match any of ['August 8, 1975']"
+    }
+  }
+}

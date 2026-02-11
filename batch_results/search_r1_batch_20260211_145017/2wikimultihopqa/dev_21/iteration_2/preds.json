@@ -1,0 +1,29 @@
+{
+  "dev_21": {
+    "solution": "<think>\nThe question asks for the nationality of the director of the film \"World And Time Enough\". I need to first find the director's name. Let's search for the director's name.\n</think>\n<search>director of the film World And Time Enough</search>\n<information>\n- The film \"World and Time Enough\" is directed by Walter Hill.\n</information>\n<think>\nNow that I know the director's name is Walter Hill, I need to find his nationality. Let's search for Walter Hill's nationality.\n</think>\n<search>Walter Hill nationality</search>\n<information>\n- Walter Hill is an American film director and screenwriter.\n</information>\n<think>\nBased on the information found, Walter Hill is American.\n</think>\n<answer>\nAmerican\n</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "American",
+      "ground_truth": [
+        "U.S.A.",
+        "US of A",
+        "US",
+        "United States of America",
+        "USA",
+        "the United States of America",
+        "United States",
+        "the US",
+        "🇺🇸",
+        "the United States",
+        "U.S.",
+        "America",
+        "the USA"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": true,
+      "failure_reason": "Answer 'American' does not match any of ['U.S.A.', 'US of A', 'US', 'United States of America', 'USA', 'the United States of America', 'United States', 'the US', '🇺🇸', 'the United States', 'U.S.', 'America', 'the USA']"
+    }
+  }
+}

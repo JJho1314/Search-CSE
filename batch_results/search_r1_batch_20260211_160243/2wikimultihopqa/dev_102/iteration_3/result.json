@@ -1,0 +1,25 @@
+{
+  "instance_id": "dev_102",
+  "success": true,
+  "solution": "<think>Philip Of Ibelin (1180–1227) is a historical figure. His mother's nationality needs to be determined. </think>\n<search>nationality of Philip Of Ibelin's mother</search>\n<information>\n Philip of Ibelin's mother was Alice de Brienne, who was of French descent.\n</information>\n<think>From the information, we know that Philip Of Ibelin's mother, Alice de Brienne, was of French descent. Therefore, her nationality is French.</think>\n<answer>French</answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "French",
+    "ground_truth": [
+      " Heraclius",
+      "Byzantine",
+      "Byzantine Empire",
+      "Eastern Roman Empire",
+      "Roman Empire",
+      "Byzantium",
+      "Romania"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": false,
+    "failure_reason": "Answer 'French' does not match any of [' Heraclius', 'Byzantine', 'Byzantine Empire', 'Eastern Roman Empire', 'Roman Empire', 'Byzantium', 'Romania']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_160243/2wikimultihopqa/dev_102/iteration_3/dev_102.traj",
+  "error": null
+}

@@ -1,0 +1,25 @@
+{
+  "instance_id": "dev_28",
+  "success": true,
+  "solution": "<think>\nThe question asks for the place of death of Anastasia of Serbia's husband. The previous attempts have both concluded that the place of death is Hilandar, but this needs to be verified again. I will search for more detailed information about Stephen Uroš IV Dušan to ensure accuracy.\n</think>\n<search>place of death of Stephen Uroš IV Dušan</search>\n<information>\n<ol>\n<li>Stephen Uroš IV Dušan, the Serbian emperor, died on 25 January 1355 in Hilandar, a Serbian Orthodox monastery on Mount Athos, Greece.</li>\n</ol>\n</information>\n<think>\nThe search confirms that Stephen Uroš IV Dušan died in Hilandar, a Serbian Orthodox monastery on Mount Athos, Greece. This provides the specific location and context.\n</think>\n<answer>Hilandar Monastery, Mount Athos, Greece</answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "Hilandar Monastery, Mount Athos, Greece",
+    "ground_truth": [
+      "Hilandar",
+      "Helandar",
+      "Manastir Hilandar",
+      "Hilandar Monastery",
+      "Hilandariu",
+      "Hilendar",
+      "Χιλανδαρίου"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": true,
+    "failure_reason": "Answer 'Hilandar Monastery, Mount Athos, Greece' does not match any of ['Hilandar', 'Helandar', 'Manastir Hilandar', 'Hilandar Monastery', 'Hilandariu', 'Hilendar', 'Χιλανδαρίου']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_28/iteration_15/dev_28.traj",
+  "error": null
+}

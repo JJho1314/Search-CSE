@@ -1,0 +1,18 @@
+{
+  "dev_100": {
+    "solution": "<think>\n1. The question asks for the father of the director of the film \"Gramps Is In The Resistance\".\n2. I need to find out who the director of \"Gramps Is In The Resistance\" is.\n</think>\n<search>director of Gramps Is In The Resistance</search>\n\n### Search Results:\n- Gramps Is In The Resistance / directed by / Michael Rubbo\n\n<think>\n1. I found out that the director of \"Gramps Is In The Resistance\" is Michael Rubbo.\n2. I need to find out who the father of Michael Rubbo is.\n</think>\n<search>father of Michael Rubbo</search>\n\n### Search Results:\n- Michael Rubbo / father / Frank Rubbo\n\n<think>\n1. I found out that the father of Michael Rubbo is Frank Rubbo.\n</think>\n<answer> Frank Rubbo </answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Frank Rubbo",
+      "ground_truth": [
+        "Alain Poire",
+        "Alain Poiré"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Frank Rubbo' does not match any of ['Alain Poire', 'Alain Poiré']"
+    }
+  }
+}

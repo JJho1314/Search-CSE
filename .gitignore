@@ -129,3 +129,5 @@ data/*
 output/*
 instances/livecodebench/
 configs_personal/
+
+instances/

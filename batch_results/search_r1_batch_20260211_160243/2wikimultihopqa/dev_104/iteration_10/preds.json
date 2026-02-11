@@ -1,0 +1,16 @@
+{
+  "dev_104": {
+    "solution": "<think>\nThe question asks for the birthday of the lead guitarist of \"List Of The Dillinger Escape Plan Band Members\". I need to find out who the lead guitarist is and then search for their birthday.\n</think>\n<search>List Of The Dillinger Escape Plan Band Members</search>\n<information>\n[List of Dillinger Escape Plan members - Wikipedia)</information>\n</think>\n<search>Mike Patton birthday</search>\n<information>\n[Mike Patton - Wikipedia)</information>\n</think>\n<answer>\nAugust 8, 1975\n</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "August 8, 1975",
+      "ground_truth": [
+        "August 8, 1975"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "instance_id": "dev_102",
+  "success": true,
+  "solution": "<think>Philip Of Ibelin (1180–1227) is a historical figure who lived during the Crusades. His mother's nationality might not be explicitly mentioned in the common historical records. I will search for more specific information about Philip Of Ibelin's family to find his mother's nationality.</think>\n<search>nationality of Philip Of Ibelin's mother</search>\n<information>\n Philip I of Ibelin was married to Hodierna Bonacall, who was a member of the Bonacall family of Armiel.</information>\n<think>From the search result, we know that Philip Of Ibelin's mother was Hodierna Bonacall. The Bonacall family was from Armiel, which is in the region of Galilee in what is now northern Israel. Therefore, Hodierna Bonacall, and consequently Philip Of Ibelin's mother, was of Levantine nationality.</think>\n<answer>Levantine</answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "Levantine",
+    "ground_truth": [
+      " Heraclius",
+      "Byzantine",
+      "Byzantine Empire",
+      "Eastern Roman Empire",
+      "Roman Empire",
+      "Byzantium",
+      "Romania"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": false,
+    "failure_reason": "Answer 'Levantine' does not match any of [' Heraclius', 'Byzantine', 'Byzantine Empire', 'Eastern Roman Empire', 'Roman Empire', 'Byzantium', 'Romania']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_160243/2wikimultihopqa/dev_102/iteration_5/dev_102.traj",
+  "error": null
+}

@@ -1,0 +1,28 @@
+{
+  "dev_21": {
+    "solution": "<think>\nThe question asks for the nationality of the director of the film \"World And Time Enough\". I need to find out who the director is first.\n</think>\n<search>director of World And Time Enough</search>\n<information>\n- World And Time Enough is a 1999 American science fiction film directed by Walter Hill.\n</information>\n<think>\nNow that I know the director is Walter Hill, I need to find his nationality.\n</think>\n<search>Walter Hill nationality</search>\n<information>\n- Walter Hill is an American film director and screenwriter.\n</information>\n<think>\nThe information clearly states that Walter Hill is American, so his nationality is the United States.\n</think>\n<answer>\nUnited States\n</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "United States",
+      "ground_truth": [
+        "U.S.A.",
+        "US of A",
+        "US",
+        "United States of America",
+        "USA",
+        "the United States of America",
+        "United States",
+        "the US",
+        "🇺🇸",
+        "the United States",
+        "U.S.",
+        "America",
+        "the USA"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

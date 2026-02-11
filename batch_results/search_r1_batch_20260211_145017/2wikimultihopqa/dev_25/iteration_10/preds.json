@@ -1,0 +1,24 @@
+{
+  "dev_25": {
+    "solution": "<think>\nThe question asks about Marie Zéphyrine of France's paternal grandmother. From the previous search, we know that Louis Antoine, Duke of Angoulême is her father. We need to find his mother to determine the paternal grandmother. Let's search for Louis Antoine, Duke of Angoulême's mother.\n</think>\n<search>Louis Antoine, Duke of Angoulême mother</search>\n<information>\nLouis Antoine, Duke of Angoulême was the son of Louis VIII of France and Blanche of Castile.\n</information>\n<think>\nFrom the search result, we can see that Louis Antoine's mother is Blanche of Castile. However, we need to confirm if Blanche of Castile is the paternal grandmother of Marie Zéphyrine of France. Since Louis VIII of France is the father of Louis Antoine, Blanche of Castile is indeed his mother and therefore the paternal grandmother of Marie Zéphyrine of France.\n</think>\n<answer>Blanche of Castile</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Blanche of Castile",
+      "ground_truth": [
+        "Königin Maria Frankreich",
+        "Queen, consort of Louis XV, King of France Marie Leszczyńska",
+        "Queen, consort of Louis XV, King of France Maria Leszczyńska",
+        "Marie-Catherine Leszczyńska",
+        "Marie Leszczyńska",
+        "Queen consort of Louis XV Marie Leszczyńska",
+        "Marie Leszczyńska reine de France",
+        "queen of France Marie Leszczyńska"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Blanche of Castile' does not match any of ['Königin Maria Frankreich', 'Queen, consort of Louis XV, King of France Marie Leszczyńska', 'Queen, consort of Louis XV, King of France Maria Leszczyńska', 'Marie-Catherine Leszczyńska', 'Marie Leszczyńska', 'Queen consort of Louis XV Marie Leszczyńska', 'Marie Leszczyńska reine de France', 'queen of France Marie Leszczyńska']"
+    }
+  }
+}

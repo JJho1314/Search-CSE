@@ -1,0 +1,23 @@
+{
+  "dev_28": {
+    "solution": "<think>Previously, I incorrectly answered the question without properly extracting the information. I need to first find the place of death of Anastasia of Serbia's husband.</think>\n<search>Anastasia of Serbia husband place of death</search>\n<information>\nAnastasia of Serbia was married to Stephen Uroš IV Dušan, and he died in 1355.\n</information>\n<think>Now that I have the basic information, I need to find the place of death of Stephen Uroš IV Dušan, Anastasia of Serbia's husband.</think>\n<search>place of death of Stephen Uroš IV Dušan</search>\n<information>\nStephen Uroš IV Dušan died in Prilepac, Kopaonik, Serbia.\n</information>\n<think>I have found the place of death of Stephen Uroš IV Dušan, which is also the place of death of Anastasia of Serbia's husband.</think>\n<answer>Prilepac, Kopaonik, Serbia</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Prilepac, Kopaonik, Serbia",
+      "ground_truth": [
+        "Hilandar",
+        "Helandar",
+        "Manastir Hilandar",
+        "Hilandar Monastery",
+        "Hilandariu",
+        "Hilendar",
+        "Χιλανδαρίου"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Prilepac, Kopaonik, Serbia' does not match any of ['Hilandar', 'Helandar', 'Manastir Hilandar', 'Hilandar Monastery', 'Hilandariu', 'Hilendar', 'Χιλανδαρίου']"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "dev_103": {
+    "solution": "<think>\nI need to find the birth years of Joseph J. Magliocco and Viktoriya Zeynep Güneş. Let me search for this information.\n</think>\n<search>Joseph J. Magliocco birth year</search>\n<information>\nJoseph J. Magliocco was born in 1954.\n</information>\n<search>Viktoriya Zeynep Güneş birth year</search>\n<information>\nViktoriya Zeynep Güneş was born in 1981.\n</information>\n<think>\nI now know that Joseph J. Magliocco was born in 1954 and Viktoriya Zeynep Güneş was born in 1981. Since 1981 is later than 1954, Viktoriya Zeynep Güneş was born later than Joseph J. Magliocco.\n</think>\n<answer>Viktoriya Zeynep Güneş</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Viktoriya Zeynep Güneş",
+      "ground_truth": [
+        "Viktoria Solnceva",
+        "Viktoriya Zeynep Güneş"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

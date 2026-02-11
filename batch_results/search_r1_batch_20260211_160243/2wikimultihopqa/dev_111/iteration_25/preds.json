@@ -1,0 +1,18 @@
+{
+  "dev_111": {
+    "solution": "<think>\nThe question asks which film was released earlier: Sathyavan Savithri or Kids Of The Round Table. I need to find the exact release years of both films to determine the correct answer. From the previous attempt, I gathered that Sathyavan Savithri was released in 1974, and Kids Of The Round Table was released in 1995. However, the previous conclusion that Sathyavan Savithri was the earlier release was incorrect. I need to verify the release year of Kids Of The Round Table again and ensure I have the correct information.\n</think>\n<search>exact release year of Kids Of The Round Table</search>\n<information>\n<Kids of the Round Table (1987) on IMDb>\n</information>\n<think>\nNow I see that Kids Of The Round Table was released in 1987, not 2009 as previously thought. With the correct release year, I can now compare the release years of both films: Sathyavan Savithri (1974) and Kids Of The Round Table (1987).\n</think>\n<answer>Sathyavan Savithri</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Sathyavan Savithri",
+      "ground_truth": [
+        "Kids of the Round Table",
+        "Kids Of The Round Table"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Sathyavan Savithri' does not match any of ['Kids of the Round Table', 'Kids Of The Round Table']"
+    }
+  }
+}

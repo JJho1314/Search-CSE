@@ -1,0 +1,24 @@
+{
+  "instance_id": "dev_102",
+  "success": true,
+  "solution": "<think>Both attempts have consistently identified Isabella of Tripoli as Philip Of Ibelin's mother and correctly noted that she was a Byzantine noblewoman. Therefore, the nationality should be Byzantine. However, let's double-check this by searching for more specific information about Isabella of Tripoli and her family background.</think>\n<search>family background of Isabella of Tripoli</search>\n<information>\n<answer>Isabella of Tripoli was the daughter of Leo I of Tripoli and Theodora of Antioch, both of whom were Byzantine nobles.</answer>\n</information>\n<think>This confirms that Isabella of Tripoli's mother, Theodora of Antioch, was also a Byzantine noblewoman. Therefore, Isabella of Tripoli herself was Byzantine.</think>\n<answer>Byzantine</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Byzantine",
+    "ground_truth": [
+      " Heraclius",
+      "Byzantine",
+      "Byzantine Empire",
+      "Eastern Roman Empire",
+      "Roman Empire",
+      "Byzantium",
+      "Romania"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_160243/2wikimultihopqa/dev_102/iteration_25/dev_102.traj",
+  "error": null
+}

@@ -1,0 +1,68 @@
+# PerfAgent 基础配置 - Search-R1 (QA Search & Reasoning)
+# 本地 vLLM server 模式，对应 Search-R1 evaluate.sh 的参数
+
+# 通用配置
+max_iterations: 5
+early_stop_no_improve: 3
+adopt_only_if_improved: false
+# metric 比较方向：true=越大越好
+# Search-R1 的 TaskRunner 返回 EM reward（1.0=正确，0.0=错误）
+metric_higher_is_better: true
+
+# 模型配置（本地 vLLM server）
+model:
+  name: SearchR1-nq_hotpotqa_train-qwen2.5-3b-em-grpo-v0.3
+  api_base: http://127.0.0.1:8000/v1
+  api_key: "EMPTY"
+  temperature: 0.7
+  max_output_tokens: 4096
+  # vLLM server 一般响应快，但搜索循环可能多轮
+  request_timeout: 120.0
+  max_retries: 3
+
+# 轨迹与日志
+logging:
+  save_trajectory: true
+  trajectory_dir: "./trajectories"
+  log_level: "INFO"
+
+# Prompt 模板
+prompts:
+  system_template: |
+    Answer the given question.
+    You must conduct reasoning inside <think> and </think> first every time you get new information.
+    After reasoning, if you find you lack some knowledge, you can call a search engine by
+    <search> query </search> and it will return the top searched results between
+    <information> and </information>.
+    You can search as many times as you want.
+    If you find no further external knowledge needed, you can directly provide the answer
+    inside <answer> and </answer>, without detailed illustrations.
+    For example, <answer> Beijing </answer>.
+
+    Question: {question}
+
+    ## Context
+    **Additional Requirements**: {additional_requirements}
+    **Local Memory**: {local_memory}
+    **Global Memory**: {global_memory}
+
+  optimization_template: |
+    Your previous answer was incorrect. Please try again with a different search strategy.
+
+    Previous attempt result:
+    - Metric (EM): {metric}
+
+    Instructions:
+    1. Re-read the question carefully
+    2. Try different or more specific search queries
+    3. Reason step by step inside <think>...</think>
+    4. Provide a corrected answer inside <answer>...</answer>
+
+# 任务特定配置（传给 SearchR1Runner）
+# 对应 evaluate.sh 中的 retriever.url 和 retriever.topk
+task_config:
+  search_url: "http://127.0.0.1:8001/retrieve"
+  topk: 3
+  # 对应 evaluate.sh 中的 max_turns=4
+  max_search_turns: 4
+  timeout: 10

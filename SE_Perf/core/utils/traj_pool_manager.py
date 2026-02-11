@@ -37,6 +37,7 @@ class TrajPoolManager:
         llm_client=None,
         memory_manager: Optional["LocalMemoryManager"] = None,  # noqa: F821
         prompt_config: dict[str, Any] | None = None,
+        metric_higher_is_better: bool = False,
     ):
         """
         初始化轨迹池管理器。
@@ -47,6 +48,7 @@ class TrajPoolManager:
             llm_client: LLM 客户端实例，用于轨迹总结。
             memory_manager: 本地记忆管理器。
             prompt_config: 提示词配置字典。
+            metric_higher_is_better: metric 方向。True=越大越好（如 EM），False=越小越好（如运行时间）。
         """
         self.pool_path = Path(pool_path)
         self.instance_name = instance_name
@@ -54,6 +56,7 @@ class TrajPoolManager:
         self.logger = get_se_logger("traj_pool", emoji="🏊")
         self.memory_manager = memory_manager
         self.prompt_config = prompt_config or {}
+        self.metric_higher_is_better = metric_higher_is_better
         self._best_label: str | None = None
 
     # -----------------------------------------------------------------------
@@ -525,7 +528,16 @@ class TrajPoolManager:
     # -----------------------------------------------------------------------
 
     def _select_best_label(self, pool_data: dict[str, Any]) -> str | None:
-        """从池数据中选出性能最优的标签（metric 越低越好）。"""
+        """从池数据中选出性能最优的标签。
+
+        根据 ``self.metric_higher_is_better`` 决定排序方向：
+        - False（默认）：metric 越低越好（如运行时间）
+        - True：metric 越高越好（如 EM/准确率）
+        """
+        higher = self.metric_higher_is_better
+        # 无效 metric 的哨兵值：始终为"最差"
+        worst_val = -float("inf") if higher else float("inf")
+
         candidates: list[tuple[str, float, int]] = []  # (label, perf, iteration)
         for k, v in pool_data.items():
             if k == "problem" or not isinstance(v, dict):
@@ -537,17 +549,17 @@ class TrajPoolManager:
                 elif isinstance(perf_val, str):
                     s = perf_val.strip().lower()
                     if s in ("inf", "+inf", "infinity", "+infinity"):
-                        val = float("inf")
+                        val = worst_val
                     elif s in ("-inf", "-infinity"):
-                        val = float("inf")
+                        val = worst_val
                     elif s == "nan":
-                        val = float("inf")
+                        val = worst_val
                     else:
                         val = float(s)
                 else:
-                    val = float("inf")
+                    val = worst_val
             except Exception:
-                val = float("inf")
+                val = worst_val
 
             label_txt = str(v.get("label") or k)
             it_raw = v.get("iteration")
@@ -562,7 +574,12 @@ class TrajPoolManager:
 
         finite = [c for c in candidates if math.isfinite(c[1])]
         if finite:
-            finite.sort(key=lambda t: (t[1], -t[2]))
+            if higher:
+                # metric 越大越好：降序排列，相同 metric 时取更新的迭代
+                finite.sort(key=lambda t: (-t[1], -t[2]))
+            else:
+                # metric 越小越好：升序排列，相同 metric 时取更新的迭代
+                finite.sort(key=lambda t: (t[1], -t[2]))
             return finite[0][0]
         candidates.sort(key=lambda t: (-t[2], t[0]))
         return candidates[0][0]

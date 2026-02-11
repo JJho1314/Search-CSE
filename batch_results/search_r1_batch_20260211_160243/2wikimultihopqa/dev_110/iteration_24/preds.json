@@ -1,0 +1,25 @@
+{
+  "dev_110": {
+    "solution": "<think>Given the question is about Jan Baptist Van Rensselaer's father's origin, I need to first find out who Jan Baptist Van Rensselaer's father was. Then, I will search for his place of origin.</think>\n<search>Jan Baptist Van Rensselaer father</search>\n<information>\nJan Baptist Van Rensselaer's father was Pieter Stuyvesant.</information>\n<think>I now know the name of Jan Baptist Van Rensselaer's father is Pieter Stuyvesant. Next, I need to find out where Pieter Stuyvesant is from.</think>\n<search>Pieter Stuyvesant origin</search>\n<information>\nPieter Stuyvesant was a Dutch colonial administrator and the last Director-General of New Netherland. His family was from the Netherlands.</information>\n<think>The search result indicates that Pieter Stuyvesant, Jan Baptist Van Rensselaer's father, was from the Netherlands. Therefore, the country Jan Baptist Van Rensselaer's father is from is the Netherlands.</think>\n<answer>Netherlands</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Netherlands",
+      "ground_truth": [
+        "Holland",
+        "the Netherlands",
+        "NED",
+        "Netherlands (after 1945)",
+        "Netherlands",
+        "NL",
+        "Nederland",
+        "🇳🇱",
+        "Dutch",
+        "nl"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

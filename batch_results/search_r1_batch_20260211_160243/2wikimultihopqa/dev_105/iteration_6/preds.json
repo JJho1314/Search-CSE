@@ -1,0 +1,20 @@
+{
+  "dev_105": {
+    "solution": "<think>\nHuma Abedin's husband is Anthony Weiner, but I need to verify his current workplace. I will search for the current position of Chuck Schumer, as he is the correct person since Huma Abedin's husband is actually Chuck Schumer.\n</think>\n<search>Chuck Schumer current position</search>\n<information>\nChuck Schumer is the current United States Senator from New York.\n</information>\n<think>\nBased on the information available, Chuck Schumer is currently the United States Senator from New York.\n</think>\n<answer>United States Senator from New York</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "United States Senator from New York",
+      "ground_truth": [
+        "Chuck Schumer",
+        "Charles Schumer",
+        "Charles Ellis Schumer",
+        "Charles Ellis \"Chuck\" Schumer"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'United States Senator from New York' does not match any of ['Chuck Schumer', 'Charles Schumer', 'Charles Ellis Schumer', 'Charles Ellis \"Chuck\" Schumer']"
+    }
+  }
+}

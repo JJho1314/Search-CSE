@@ -1,0 +1,25 @@
+{
+  "dev_110": {
+    "solution": "<think>\nThe question asks about the country Jan Baptist Van Rensselaer's father is from. Since we don't have information on this, we need to search for more details about Jan Baptist Van Rensselaer.\n</think>\n<search>Jan Baptist Van Rensselaer background</search>\n<information>\nJan Baptist Van Rensselaer was a Dutch colonial administrator and landowner in New Netherland.\n</information>\n<think>\nJan Baptist Van Rensselaer was a Dutch colonial administrator. This means his father, as a parent of a Dutch national, is also from the Netherlands.\n</think>\n<answer>\nNetherlands\n</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Netherlands",
+      "ground_truth": [
+        "Holland",
+        "the Netherlands",
+        "NED",
+        "Netherlands (after 1945)",
+        "Netherlands",
+        "NL",
+        "Nederland",
+        "🇳🇱",
+        "Dutch",
+        "nl"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

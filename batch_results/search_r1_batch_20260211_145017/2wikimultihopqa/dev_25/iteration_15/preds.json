@@ -1,0 +1,24 @@
+{
+  "dev_25": {
+    "solution": "<think>\nThe question asks about Marie Zéphyrine of France's paternal grandmother. We know from the previous attempts that Louis Antoine, Duke of Angoulême is her father. We also know that Louis Antoine's mother is Blanche of Castile, who was Louis VIII of France and Blanche of Castile's daughter. However, Blanche of Castile is not the paternal grandmother of Marie Zéphyrine of France. We need to find who Louis VIII of France's mother was, as she would be the paternal grandmother of Marie Zéphyrine of France.\n</think>\n<search>Louis VIII of France mother</search>\n<information>\nLouis VIII of France was the son of Louis VII of France and Blanche of Navarre.\n</information>\n<think>\nThe search result shows that Louis VIII of France's mother was Blanche of Navarre. Therefore, Blanche of Navarre is the paternal grandmother of Marie Zéphyrine of France.\n</think>\n<answer>Blanche of Navarre</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Blanche of Navarre",
+      "ground_truth": [
+        "Königin Maria Frankreich",
+        "Queen, consort of Louis XV, King of France Marie Leszczyńska",
+        "Queen, consort of Louis XV, King of France Maria Leszczyńska",
+        "Marie-Catherine Leszczyńska",
+        "Marie Leszczyńska",
+        "Queen consort of Louis XV Marie Leszczyńska",
+        "Marie Leszczyńska reine de France",
+        "queen of France Marie Leszczyńska"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Blanche of Navarre' does not match any of ['Königin Maria Frankreich', 'Queen, consort of Louis XV, King of France Marie Leszczyńska', 'Queen, consort of Louis XV, King of France Maria Leszczyńska', 'Marie-Catherine Leszczyńska', 'Marie Leszczyńska', 'Queen consort of Louis XV Marie Leszczyńska', 'Marie Leszczyńska reine de France', 'queen of France Marie Leszczyńska']"
+    }
+  }
+}

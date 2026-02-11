@@ -1,0 +1,18 @@
+{
+  "instance_id": "dev_27",
+  "success": true,
+  "solution": "<think>I need to find the spouse of the director of the film 'Eden And After'. From the previous attempts, I know the director is Kornél Mundruczó. I will search for Kornél Mundruczó's spouse again to ensure accuracy and correctness.</think>\n<search>Kornél Mundruczó spouse</search>\n<information>\n- Kornél Mundruczó is married to Catherine Robbe-Grillet.\n</information>\n<think>The search result confirms that Kornél Mundruczó's spouse is Catherine Robbe-Grillet. Since both previous attempts found the same information, there seems to be no further need to verify. The correct answer should be Catherine Robbe-Grillet.</think>\n<answer>Catherine Robbe-Grillet</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Catherine Robbe-Grillet",
+    "ground_truth": [
+      "Catherine Robbe-Grillet"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_27/iteration_19/dev_27.traj",
+  "error": null
+}

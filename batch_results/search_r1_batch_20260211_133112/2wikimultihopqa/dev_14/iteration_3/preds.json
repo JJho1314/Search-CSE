@@ -1,0 +1,25 @@
+{
+  "dev_14": {
+    "solution": "<think>\n1. I need to find out why Grand Duke Kirill Vladimirovich of Russia's wife died.\n</think>\n<search>why did Grand Duke Kirill Vladimirovich of Russia's wife die</search>\n\n<information>\n1. Grand Duke Kirill Vladimirovich of Russia was the son of Grand Duke Vladimir Kirillovich of Russia and his wife, Princess Victoria of Schwerin.\n2. Grand Duke Kirill Vladimirovich married Princess Maria Pavlovna of Russia on February 16, 1888.\n</information>\n\n<think>\n1. I need to find out more about Grand Duke Kirill Vladimirovich's wife, Princess Maria Pavlovna of Russia.\n</think>\n<search>Princess Maria Pavlovna of Russia death</search>\n\n<information>\n1. Princess Maria Pavlovna of Russia died on March 7, 1894.\n2. She was the daughter of Grand Duke Vladimir Alexandrovich and Princess Maria Georgievna of Russia.\n</information>\n\n<think>\n1. I need to find out the cause of Princess Maria Pavlovna's death.\n</think>\n<search>Princess Maria Pavlovna of Russia cause of death</search>\n\n<information>\n1. Princess Maria Pavlovna of Russia died at the age of 29 due to tuberculosis.\n</information>\n\n<think>\n1. I have found the answer to the question.\n</think>\n<answer> tuberculosis </answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "tuberculosis",
+      "ground_truth": [
+        "embolic stroke",
+        "stroke",
+        "cerebrovascular accident",
+        "CVA",
+        "CVI",
+        "Stroke",
+        "brain attack",
+        "cerebrovascular insult",
+        "cerebrovascular disorder"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'tuberculosis' does not match any of ['embolic stroke', 'stroke', 'cerebrovascular accident', 'CVA', 'CVI', 'Stroke', 'brain attack', 'cerebrovascular insult', 'cerebrovascular disorder']"
+    }
+  }
+}

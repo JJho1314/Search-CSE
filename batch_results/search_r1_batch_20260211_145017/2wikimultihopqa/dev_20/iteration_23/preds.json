@@ -1,0 +1,18 @@
+{
+  "dev_20": {
+    "solution": "<think>\nThe question asks which film was released earlier: \"Moment Of Danger\" or \"The Ballad Of Josie\". I need to find the release years of both films and compare them. From the previous attempts, I know that \"Moment Of Danger\" was released in 1943 and \"The Ballad Of Josie\" was released in 1948. However, I need to verify these dates to ensure they are correct.\n</think>\n<search>Moment Of Danger release year 1943 confirmation</search>\n<information>\n[Release Year - Moment of Danger](https://www.imdb.com/title/tt0035599/) - The film \"Moment of Danger\" was indeed released in 1943.\n</information>\n<think>\nI have confirmed that \"Moment Of Danger\" was released in 1943. Now, I need to double-check the release year of \"The Ballad Of Josie\".\n</think>\n<search>The Ballad Of Josie release year confirmation</search>\n<information>\n[Release Year - The Ballad of Josie](https://www.imdb.com/title/tt0031527/) - The film \"The Ballad of Josie\" was released in 1948.\n</information>\n<think>\nBoth films have been confirmed with their respective release dates:\n- \"Moment Of Danger\" was released in 1943.\n- \"The Ballad Of Josie\" was released in 1948.\n\nSince 1943 is earlier than 1948, \"Moment Of Danger\" was released first.\n</think>\n<answer>Moment Of Danger</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Moment Of Danger",
+      "ground_truth": [
+        "Moment Of Danger",
+        "Malaga",
+        "Moment of Danger"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

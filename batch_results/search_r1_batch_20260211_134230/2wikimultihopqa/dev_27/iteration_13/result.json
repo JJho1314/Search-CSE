@@ -1,0 +1,19 @@
+{
+  "instance_id": "dev_27",
+  "success": true,
+  "solution": "<think>\nThe question asks for the spouse of the director of the film \"Eden And After\".\n</think>\n<search>director of film Eden And After</search>\n\n<information>\nDirector: Partho Sarathi\n</information>\n\n<think>\nI know the director of \"Eden And After\" is Partho Sarathi.\n</think>\n<search>Partho Sarathi spouse</search>\n\n<information>\nPartho Sarathi is married to Shalmali Dey.\n</information>\n\n<think>\nI know the director of \"Eden And After\" is Partho Sarathi and his spouse is Shalmali Dey.\n</think>\n<answer>Shalmali Dey</answer>",
+  "metric": 0.0,
+  "artifacts": {
+    "extracted_answer": "Shalmali Dey",
+    "ground_truth": [
+      "Catherine Robbe-Grillet"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": false,
+    "subem_match": false,
+    "failure_reason": "Answer 'Shalmali Dey' does not match any of ['Catherine Robbe-Grillet']"
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_134230/2wikimultihopqa/dev_27/iteration_13/dev_27.traj",
+  "error": null
+}

@@ -1,0 +1,23 @@
+{
+  "datasets": {
+    "2wikimultihopqa": {
+      "baseline_em": 0.2,
+      "best_em": 0.6,
+      "improvement": 0.39999999999999997,
+      "improved": "4/10",
+      "solved": "6/10",
+      "solved_ratio": 0.6,
+      "errors": 0
+    }
+  },
+  "overall": {
+    "total_instances": 10,
+    "baseline_em": 0.2,
+    "best_em": 0.6,
+    "improvement": 0.39999999999999997,
+    "improved": 4,
+    "solved": 6,
+    "solved_ratio": 0.6,
+    "errors": 0
+  }
+}

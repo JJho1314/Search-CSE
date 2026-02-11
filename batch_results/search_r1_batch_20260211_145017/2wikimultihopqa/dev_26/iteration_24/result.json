@@ -1,0 +1,18 @@
+{
+  "instance_id": "dev_26",
+  "success": true,
+  "solution": "<think>\nThe question asks which film has the director who died earlier: \"Condemned Women\" or \"Faces In The Dark\". I need to find out who the directors of these films are and their respective death years.\n</think>\n<search>director of Condemned Women</search>\n<information>\n- Richard Wallace was the director of Condemned Women\n</information>\n<think>\nNow I have the director of Condemned Women. Next, I need to find out the director of Faces In The Dark.\n</think>\n<search>director of Faces In The Dark</search>\n<information>\n- Joshua Marston was the director of Faces In The Dark\n</information>\n<think>\nNow I have both directors. The next step is to find out when each director died.\n</think>\n<search>death year of Richard Wallace</search>\n<information>\n- Richard Wallace died in 1948\n</information>\n<search>death year of Joshua Marston</search>\n<information>\n- Joshua Marston died in 2018\n</information>\n<think>\nRichard Wallace died in 1948 and Joshua Marston died in 2018. Since 1948 is earlier than 2018, the director who died earlier is Richard Wallace. Therefore, the film \"Condemned Women\" has the director who died earlier.\n</think>\n<answer>\nCondemned Women\n</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Condemned Women",
+    "ground_truth": [
+      "Condemned Women"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_145017/2wikimultihopqa/dev_26/iteration_24/dev_26.traj",
+  "error": null
+}

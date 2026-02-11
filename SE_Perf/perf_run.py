@@ -143,6 +143,7 @@ def main():
             llm_client=llm_client,
             memory_manager=local_memory,
             prompt_config=se_cfg.prompt_config.to_dict(),
+            metric_higher_is_better=se_cfg.metric_higher_is_better,
         )
         traj_pool_manager.initialize_pool()
 

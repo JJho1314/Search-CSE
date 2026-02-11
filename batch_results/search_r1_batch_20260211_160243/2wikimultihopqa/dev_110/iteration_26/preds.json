@@ -1,0 +1,25 @@
+{
+  "dev_110": {
+    "solution": "<think>Since Jan Baptist Van Rensselaer's father was Pieter van Rensselaer, I need to find out the origin of Pieter van Rensselaer. The previous information did not provide his origin, so I need to search for it again.</think>\n<search>Pieter van Rensselaer origin</search>\n<information>\nPieter van Rensselaer was a Dutch patroon who held the position of patroon of Rensselaerswyck in the 17th century. Rensselaerswyck was a Dutch colony located in present-day New York.\n</information>\n<think>Based on the search result, Pieter van Rensselaer was a Dutch patroon. Therefore, his origin must be the Netherlands.</think>\n<answer>Netherlands</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Netherlands",
+      "ground_truth": [
+        "Holland",
+        "the Netherlands",
+        "NED",
+        "Netherlands (after 1945)",
+        "Netherlands",
+        "NL",
+        "Nederland",
+        "🇳🇱",
+        "Dutch",
+        "nl"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

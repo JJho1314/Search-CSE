@@ -325,6 +325,9 @@ class SEPerfRunSEConfig:
     model: ModelConfig = field(default_factory=ModelConfig)
     instances: InstancesConfig = field(default_factory=InstancesConfig)
     max_iterations: int = 1
+    # metric 比较方向：False=越小越好(默认，如运行时间)，True=越大越好(如 EM/准确率)
+    # 若未显式设置，会在运行时从 base_config 中自动检测
+    metric_higher_is_better: bool = False
     local_memory: LocalMemoryConfig | None = None
     prompt_config: PromptConfig = field(default_factory=PromptConfig)
     strategy: StrategyConfig = field(default_factory=StrategyConfig)
@@ -339,6 +342,7 @@ class SEPerfRunSEConfig:
             "model": self.model.to_dict(),
             "instances": self.instances.to_dict(),
             "max_iterations": self.max_iterations,
+            "metric_higher_is_better": self.metric_higher_is_better,
             "prompt_config": self.prompt_config.to_dict(),
             "strategy": self.strategy.to_dict(),
         }
@@ -381,6 +385,26 @@ class SEPerfRunSEConfig:
         local_memory = LocalMemoryConfig.from_dict(lm_dict) if isinstance(lm_dict, dict) else None
         prompt_config = PromptConfig.from_dict((d or {}).get("prompt_config") or {})
         strategy = StrategyConfig.from_dict((d or {}).get("strategy") or {})
+        # metric_higher_is_better: 优先从 SE 配置读取，未设置时从 base_config 自动检测
+        mhib_raw = (d or {}).get("metric_higher_is_better")
+        if mhib_raw is not None:
+            metric_higher_is_better = bool(mhib_raw)
+        elif base_config:
+            # 自动从 base_config 中检测
+            metric_higher_is_better = False
+            try:
+                from pathlib import Path as _P
+                bc_path = _P(base_config)
+                if bc_path.exists():
+                    import yaml as _yaml
+                    with open(bc_path, encoding="utf-8") as _f:
+                        _base_raw = _yaml.safe_load(_f) or {}
+                    metric_higher_is_better = bool(_base_raw.get("metric_higher_is_better", False))
+            except Exception:
+                pass
+        else:
+            metric_higher_is_better = False
+
         known = {
             "base_config",
             "output_dir",
@@ -388,6 +412,7 @@ class SEPerfRunSEConfig:
             "model",
             "instances",
             "max_iterations",
+            "metric_higher_is_better",
             "local_memory",
             "prompt_config",
             "strategy",
@@ -422,6 +447,7 @@ class SEPerfRunSEConfig:
             model=model,
             instances=instances,
             max_iterations=max_iterations,
+            metric_higher_is_better=metric_higher_is_better,
             local_memory=local_memory,
             prompt_config=prompt_config,
             strategy=strategy,

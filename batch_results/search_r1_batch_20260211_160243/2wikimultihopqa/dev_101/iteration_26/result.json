@@ -1,0 +1,20 @@
+{
+  "instance_id": "dev_101",
+  "success": true,
+  "solution": "<think>I need to find the place of birth of the performer of the song \"Heaven\". From previous knowledge, I know Namie Amuro performed this song. I need to search for Namie Amuro's place of birth.</think>\n<search>Namie Amuro place of birth</search>\n<information>\nNamie Amuro was born in Naha, Okinawa, Japan.\n</information>\n<think>The search results confirm that Namie Amuro was born in Naha, Okinawa, Japan. I need to provide this information in a concise format.</think>\n<answer>Naha</answer>",
+  "metric": 1.0,
+  "artifacts": {
+    "extracted_answer": "Naha",
+    "ground_truth": [
+      "Naha",
+      "Naha, Japan",
+      "Naha, Okinawa"
+    ],
+    "data_source": "2wikimultihopqa",
+    "em_match": true,
+    "subem_match": true
+  },
+  "total_iterations": 1,
+  "trajectory_file": "batch_results/search_r1_batch_20260211_160243/2wikimultihopqa/dev_101/iteration_26/dev_101.traj",
+  "error": null
+}

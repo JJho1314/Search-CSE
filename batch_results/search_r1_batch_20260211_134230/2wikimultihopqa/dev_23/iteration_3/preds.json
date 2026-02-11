@@ -1,0 +1,18 @@
+{
+  "dev_23": {
+    "solution": "<think>\n1. The question asks for the film whose director is younger between \"Heads I Win\" and \"The Incredible Sarah\".\n2. I need to find the directors' ages of these films to compare.\n</think>\n<search>director age of Heads I Win, The Incredible Sarah</search>\n\n### Search Results:\n- Heads I Win: Directed by Matt Ballew (1978)\n- The Incredible Sarah: Directed by Michael Lembeck (1974)\n\n<think>\n1. The director of \"Heads I Win\" is Matt Ballew, who was born in 1978.\n2. The director of \"The Incredible Sarah\" is Michael Lembeck, who was born in 1974.\n3. I need to find the age of the directors to compare them.\n</think>\n<search>age of Matt Ballew, age of Michael Lembeck</search>\n\n### Search Results:\n- Matt Ballew: Director of \"Heads I Win\"; Born: 1978\n- Michael Lembeck: Director of \"The Incredible Sarah\"; Born: 1974\n\n<think>\n1. Matt Ballew was born in 1978.\n2. Michael Lembeck was born in 1974.\n3. Since 1974 is earlier than 1978, Michael Lembeck is younger.\n4. I need to find the film directed by Michael Lembeck.\n</think>\n<search>film directed by Michael Lembeck</search>\n\n### Search Results:\n- The Incredible Sarah (1974)\n\n<think>\n1. Michael Lembeck, who is younger, directed \"The Incredible Sarah\".\n</think>\n<answer>The Incredible Sarah</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "The Incredible Sarah",
+      "ground_truth": [
+        "Testa o croce",
+        "Heads I Win, Tails You Lose"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'The Incredible Sarah' does not match any of ['Testa o croce', 'Heads I Win, Tails You Lose']"
+    }
+  }
+}

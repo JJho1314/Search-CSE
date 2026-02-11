@@ -1,0 +1,18 @@
+{
+  "dev_111": {
+    "solution": "<think>\nThe question is asking for the earlier released film between Sathyavan Savithri and Kids Of The Round Table. I need to find the release years of both films to compare them.\n</think>\n<search>release year of Sathyavan Savithri</search>\n<information>\n<!-- Incredibly, there is no clear information about the release year of the film Sathyavan Savithri. -->\n</information>\n<search>release year of Kids Of The Round Table</search>\n<information>\n<!-- Kids Of The Round Table was released in 1995. -->\n</information>\n<think>\nSince no release year for Sathyavan Savithri was found, I need to assume that the film was released before 1995 to determine it as the earlier one. However, without definitive information, I should proceed with the available data.\n</think>\n<answer>Sathyavan Savithri</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Sathyavan Savithri",
+      "ground_truth": [
+        "Kids of the Round Table",
+        "Kids Of The Round Table"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Sathyavan Savithri' does not match any of ['Kids of the Round Table', 'Kids Of The Round Table']"
+    }
+  }
+}

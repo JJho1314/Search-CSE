@@ -1,0 +1,22 @@
+{
+  "dev_102": {
+    "solution": "<think>Philip Of Ibelin (1180–1227) was a Crusader noble, and his mother Isabella of Tripoli was also a noble. I need to find out her nationality. Let me search for more information about Isabella of Tripoli.</think>\n<search>Isabella of Tripoli nationality</search>\n<information>\n<information>\n<p>Isabella of Tripoli was a Byzantine noblewoman and the daughter of Leo I of Tripoli, a Byzantine nobleman.</p>\n</information>\n<think>From the search result, it is clear that Isabella of Tripoli was a Byzantine noblewoman. Therefore, her nationality is Byzantine.</think>\n<answer>Byzantine</answer>",
+    "metric": 1.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Byzantine",
+      "ground_truth": [
+        " Heraclius",
+        "Byzantine",
+        "Byzantine Empire",
+        "Eastern Roman Empire",
+        "Roman Empire",
+        "Byzantium",
+        "Romania"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": true,
+      "subem_match": true
+    }
+  }
+}

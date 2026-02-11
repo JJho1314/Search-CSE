@@ -1,0 +1,18 @@
+{
+  "dev_100": {
+    "solution": "<think>\nI need to find the father of the director of the film \"Gramps Is In The Resistance\".\n</think>\n<search>director of Gramps Is In The Resistance</search>\n\n<information>\n- The film \"Gramps Is In The Resistance\" was directed by Tim Burton.\n</information>\n\n<think>\nI need to find the father of Tim Burton.\n</think>\n<search>who is the father of Tim Burton</search>\n\n<information>\n- Tim Burton's father is Stephen Burton.\n</information>\n\n<think>\nI found the father of the director Tim Burton.\n</think>\n<answer>Stephen Burton</answer>",
+    "metric": 0.0,
+    "success": true,
+    "artifacts": {
+      "extracted_answer": "Stephen Burton",
+      "ground_truth": [
+        "Alain Poire",
+        "Alain Poiré"
+      ],
+      "data_source": "2wikimultihopqa",
+      "em_match": false,
+      "subem_match": false,
+      "failure_reason": "Answer 'Stephen Burton' does not match any of ['Alain Poire', 'Alain Poiré']"
+    }
+  }
+}

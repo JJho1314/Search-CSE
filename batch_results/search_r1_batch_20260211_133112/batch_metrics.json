@@ -1,0 +1,15 @@
+{
+  "em/2wikimultihopqa/baseline": 0.2,
+  "em/2wikimultihopqa/best": 0.5,
+  "em/2wikimultihopqa/improved": "3/10",
+  "em/2wikimultihopqa/solved": "5/10",
+  "em/2wikimultihopqa/solved_ratio": 0.5,
+  "em/2wikimultihopqa/errors": 0,
+  "em/overall/baseline": 0.2,
+  "em/overall/best": 0.5,
+  "em/overall/n": 10,
+  "em/overall/improved": 3,
+  "em/overall/solved": 5,
+  "em/overall/solved_ratio": 0.5,
+  "em/overall/errors": 0
+}

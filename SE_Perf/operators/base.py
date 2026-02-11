@@ -122,11 +122,13 @@ class OperatorContext:
         model_config: LLM 模型配置（保留 dict，因为需透传给 LLMClient）。
         prompt_config: 提示词配置。
         selection_mode: 默认轨迹选择模式（"weighted" 或 "random"）。
+        metric_higher_is_better: metric 方向。True=越大越好（如 EM），False=越小越好（如运行时间）。
     """
 
     model_config: dict[str, Any] = field(default_factory=dict)
     prompt_config: dict[str, Any] = field(default_factory=dict)
     selection_mode: str = "weighted"
+    metric_higher_is_better: bool = False
 
 
 @dataclass
@@ -221,15 +223,21 @@ class BaseOperator(abc.ABC):
     def _weighted_select_labels(
         self, entry: InstanceTrajectories, k: int = 1, allowed_labels: list[str] | None = None
     ) -> list[str]:
-        """基于 performance 的线性加权采样选择子标签，performance 越低权重越高。
+        """基于 performance 的线性加权采样选择子标签。
+
+        权重方向由 ``self.context.metric_higher_is_better`` 控制：
+        - False（默认）：metric 越低权重越高（如运行时间：1/perf）
+        - True：metric 越高权重越高（如 EM/准确率：直接使用 perf）
+
         若提供 allowed_labels，则仅在该集合中进行采样（忽略不存在的标签）。
         """
+        higher_is_better = getattr(self.context, "metric_higher_is_better", False)
         items: list[tuple[str, float]] = []
         for subkey, traj in entry.trajectories.items():
             if allowed_labels is not None:
                 if subkey not in allowed_labels and (not traj.label or traj.label not in allowed_labels):
                     continue
-            perf_val = traj.metric if traj.metric is not None else 1.0
+            perf_val = traj.metric if traj.metric is not None else (0.0 if higher_is_better else 1.0)
             items.append((subkey, perf_val))
         if not items:
             return []
@@ -237,7 +245,12 @@ class BaseOperator(abc.ABC):
         selected: list[str] = []
         remaining = items.copy()
         for _ in range(min(k, len(remaining))):
-            weights = [max(0.001, 1.0 / max(eps, perf)) for _, perf in remaining]
+            if higher_is_better:
+                # metric 越大越好：直接用 metric 值作为权重
+                weights = [max(0.001, perf + eps) for _, perf in remaining]
+            else:
+                # metric 越小越好：用 1/metric 作为权重
+                weights = [max(0.001, 1.0 / max(eps, perf)) for _, perf in remaining]
             total = sum(weights)
             if total <= 0:
                 choice = random.choice(remaining)[0]
