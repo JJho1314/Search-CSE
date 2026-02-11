@@ -165,6 +165,27 @@ class LLMClient:
         if max_tokens is None:
             max_tokens = self.config.get("max_output_tokens", 4000)
 
+        # ---- 输入长度安全保护：防止超过 vLLM max-model-len 导致服务崩溃 ----
+        # 核心思路：用保守的 chars_per_token 比率把 token 预算转为字符预算
+        # Qwen2.5 tokenizer 对英文 ~3-4 chars/token，但 XML 标签/数字/特殊字符可低至 1-2
+        # 因此用 2.0 作为安全估算（宁可多截也不能超限）
+        max_input_tokens = self.config.get("max_input_tokens", 0)
+        if max_input_tokens > 0:
+            chars_per_token = 2.0  # 保守估算，确保不超限
+            # 可用 input token 预算 = max_input_tokens - max_output_tokens（留给输出）
+            # 再打 80% 折扣作为安全余量（tokenizer 模板开销、special tokens 等）
+            usable_input_tokens = max(1000, max_input_tokens - max_tokens)
+            safe_input_chars = int(usable_input_tokens * chars_per_token * 0.8)
+            total_chars = sum(len(m.get("content", "")) for m in messages)
+            if total_chars > safe_input_chars:
+                self.logger.warning(
+                    f"[输入截断] 消息总长度 {total_chars} 字符 (估 ~{int(total_chars / chars_per_token)} tokens) "
+                    f"超过安全阈值 {safe_input_chars} 字符 "
+                    f"(max_input={max_input_tokens}, max_output={max_tokens}, "
+                    f"usable_input={usable_input_tokens})，将截断最长的消息"
+                )
+                messages = self._truncate_messages(messages, safe_input_chars)
+
         call_start_time = time.time()
         attempt = 0
         total_retry_wait_time = 0.0
@@ -393,6 +414,67 @@ class LLMClient:
         )
         assert last_err is not None
         raise last_err
+
+    def _truncate_messages(
+        self, messages: list[dict[str, str]], max_total_chars: int
+    ) -> list[dict[str, str]]:
+        """截断消息列表使总字符数不超过 max_total_chars。
+
+        策略：保留 system 消息完整，从最长的 user/assistant 消息尾部截断。
+        如果 system 消息本身就超长，也会被截断。
+        """
+        result = [dict(m) for m in messages]  # 浅拷贝
+        total = sum(len(m.get("content", "")) for m in result)
+        if total <= max_total_chars:
+            return result
+
+        overflow = total - max_total_chars
+
+        # 优先截断非 system 消息（按长度从大到小）
+        non_system = [(i, len(m.get("content", ""))) for i, m in enumerate(result) if m.get("role") != "system"]
+        non_system.sort(key=lambda x: x[1], reverse=True)
+
+        for idx, length in non_system:
+            if overflow <= 0:
+                break
+            content = result[idx].get("content", "")
+            # 最多截掉到只剩 200 字符（保留头尾线索）
+            can_cut = max(0, length - 200)
+            cut = min(can_cut, overflow)
+            if cut > 0:
+                # 保留开头和结尾各一半
+                keep = length - cut
+                head = keep // 2
+                tail = keep - head
+                result[idx]["content"] = (
+                    content[:head]
+                    + f"\n\n... [truncated {cut} chars to fit context window] ...\n\n"
+                    + content[-tail:]
+                )
+                overflow -= cut
+                self.logger.info(f"[输入截断] 消息 #{idx} (role={result[idx].get('role')}) 截断了 {cut} 字符")
+
+        # 如果还是超长（system 消息太大），截断 system 消息
+        if overflow > 0:
+            for i, m in enumerate(result):
+                if m.get("role") == "system" and overflow > 0:
+                    content = m.get("content", "")
+                    length = len(content)
+                    can_cut = max(0, length - 500)
+                    cut = min(can_cut, overflow)
+                    if cut > 0:
+                        keep = length - cut
+                        head = keep // 2
+                        tail = keep - head
+                        result[i]["content"] = (
+                            content[:head]
+                            + f"\n\n... [truncated {cut} chars] ...\n\n"
+                            + content[-tail:]
+                        )
+                        overflow -= cut
+                        self.logger.info(f"[输入截断] system 消息截断了 {cut} 字符")
+
+        return result
 
     def call_with_system_prompt(
         self, system_prompt: str, user_prompt: str, temperature: float = 0.3, max_tokens: int | None = None

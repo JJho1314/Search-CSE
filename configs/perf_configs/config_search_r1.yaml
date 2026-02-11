@@ -15,6 +15,7 @@ model:
   api_base: http://127.0.0.1:8000/v1
   api_key: "EMPTY"
   temperature: 0.7
+  max_input_tokens: 25000
   max_output_tokens: 4096
   # vLLM server 一般响应快，但搜索循环可能多轮
   request_timeout: 120.0

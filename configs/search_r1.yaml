@@ -14,7 +14,7 @@ model:
   name: SearchR1-nq_hotpotqa_train-qwen2.5-7b-it-em-grpo-v0.3
   api_base: http://127.0.0.1:8000/v1
   api_key: "EMPTY"
-  max_input_tokens: 30000
+  max_input_tokens: 25000
   max_output_tokens: 5000
   temperature: 0.7
 
@@ -23,7 +23,7 @@ operator_models:
   name: SearchR1-nq_hotpotqa_train-qwen2.5-7b-it-em-grpo-v0.3
   api_base: http://127.0.0.1:8000/v1
   api_key: "EMPTY"
-  max_input_tokens: 30000
+  max_input_tokens: 25000
   max_output_tokens: 5000
   temperature: 0.7
 
@@ -42,6 +42,37 @@ instances:
 output_dir: "trajectories_perf/search_r1_test_{timestamp}"
 
 prompt_config:
+  plan:
+    system_prompt: |
+      You are a QA search strategy planner. Given a factual question, generate K diverse search strategies.
+      Each strategy should describe a DIFFERENT way to search for and find the answer, such as:
+      - Direct entity search: search for the main entity directly
+      - Relation chain: search step by step through relationships (e.g., find father, then find father's father)
+      - Alternative naming: search using different names, aliases, or titles for the entity
+      - Context search: search for related events, places, or time periods to find the answer indirectly
+      - Decomposition: break a multi-hop question into sub-questions and search each separately
+
+      Return ONLY a JSON code block:
+      ```json
+      {"strategies": ["strategy 1 description", "strategy 2 description", ...]}
+      ```
+      The array must contain exactly K strings. Each string should be 1-2 sentences describing the search approach.
+      NO text outside the code block.
+    user_prompt_template: |
+      Generate {k} diverse search strategies for the following question:
+
+      Question: {problem_text}
+
+      Required Count: {k}
+    strategy_header: |
+      Below is a suggested search strategy. You may use it as guidance, but focus on answering the question correctly.
+    fallback_patterns:
+      - "Search directly for the main entity mentioned in the question to find basic facts."
+      - "Break the question into sub-questions and search for each part separately."
+      - "Search for the entity using alternative names, titles, or spellings."
+      - "Search for related entities or events that might lead to the answer indirectly."
+      - "Search for a broader category or list that would contain the answer."
+
   summarizer:
     enable_summary: true
     system_prompt: |
@@ -215,28 +246,3 @@ strategy:
     # Step 10: Crossover
     - operator: "crossover"
       trajectory_label: "iter2_sol10"
-
-    # Iteration 3
-    # ==========================================================================
-    # Evolution: 10 hard-coded steps of exploration and exploitation
-    # ==========================================================================
-
-    # Step 1: Reflection and Refine
-    - operator: "reflection_refine"
-      trajectory_label: "iter3_sol1"
-
-    # Step 2: Crossover
-    - operator: "crossover"
-      trajectory_label: "iter3_sol2"
-
-    # Step 3: Reflection and Refine
-    - operator: "reflection_refine"
-      trajectory_label: "iter3_sol3"
-
-    # Step 4: Crossover
-    - operator: "crossover"
-      trajectory_label: "iter3_sol4"
-
-    # Step 5: Reflection and Refine
-    - operator: "reflection_refine"
-      trajectory_label: "iter3_sol5"

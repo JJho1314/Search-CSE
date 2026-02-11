@@ -79,6 +79,7 @@ class PerfAgent:
                 "name": self.config.model.name,
                 "api_base": self.config.model.api_base,
                 "api_key": self.config.model.api_key,
+                "max_input_tokens": self.config.model.max_input_tokens,
                 "max_output_tokens": self.config.model.max_output_tokens,
                 "request_timeout": self.config.model.request_timeout,
                 "max_retries": self.config.model.max_retries,

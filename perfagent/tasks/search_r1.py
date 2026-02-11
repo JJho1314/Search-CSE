@@ -199,6 +199,9 @@ class SearchR1Runner(BaseTaskRunner):
         self._llm_client: LLMClient | None = None
         self._llm_temperature: float = 0.7
         self._llm_max_tokens: int | None = None
+        # 上下文长度安全阈值（字符数）；由 set_llm_client 从 max_input_tokens 推算
+        # 粗略估算：1 token ≈ 3.5 字符（英文为主），保留 output 余量
+        self._max_context_chars: int = 90000  # 默认 ~25k tokens
 
     def set_llm_client(self, llm_client: LLMClient | None,
                        temperature: float = 0.7,
@@ -210,6 +213,20 @@ class SearchR1Runner(BaseTaskRunner):
         self._llm_client = llm_client
         self._llm_temperature = temperature
         self._llm_max_tokens = max_tokens
+
+        # 从 LLM client config 推算上下文安全阈值
+        if llm_client is not None:
+            cfg = getattr(llm_client, 'config', {}) or {}
+            max_input = cfg.get('max_input_tokens', 0)
+            max_output = cfg.get('max_output_tokens', max_tokens or 5000)
+            if max_input > 0:
+                # 安全余量：input 上限减去 output 预留，再留 10% buffer
+                safe_tokens = int((max_input - max_output) * 0.9)
+                self._max_context_chars = max(safe_tokens * 4, 20000)  # 1 token ≈ 4 chars
+                self._logger.info(
+                    f"上下文安全阈值: {self._max_context_chars} 字符 "
+                    f"(max_input={max_input}, max_output={max_output})"
+                )
 
     # ------------------------------------------------------------------
     # 元数据提取
@@ -252,9 +269,10 @@ class SearchR1Runner(BaseTaskRunner):
         instance: SearchR1Instance = instance_data
         answer = _extract_answer(solution)
 
+        # 注意：ground_truth 绝不能放进 artifacts，否则会泄露到 prompt 里
+        # artifacts 会被拼进 optimization prompt 和 trajectory summary，模型能看到
         artifacts: dict[str, Any] = {
             "extracted_answer": answer,
-            "ground_truth": instance.ground_truth,
             "data_source": instance.data_source,
         }
 
@@ -271,13 +289,12 @@ class SearchR1Runner(BaseTaskRunner):
         artifacts["subem_match"] = subem_passed
 
         if not em_passed:
-            artifacts["failure_reason"] = (
-                f"Answer '{answer}' does not match any of {instance.ground_truth}"
-            )
+            artifacts["failure_reason"] = "Answer does not match ground truth"
 
+        # ground_truth 只写日志，不进 artifacts
         self._logger.info(
             f"实例 {instance.id}: EM={'通过' if em_passed else '未通过'}, "
-            f"answer='{answer}', ground_truth={instance.ground_truth}"
+            f"answer='{answer}', ground_truth(first 3)={instance.ground_truth[:3]}"
         )
 
         return metric, artifacts
@@ -423,6 +440,14 @@ class SearchR1Runner(BaseTaskRunner):
                 self._logger.info(f"搜索循环: 在第 {turn} 轮检测到 <answer>，结束循环")
                 break
 
+            # ---- 上下文长度保护：防止超过 vLLM max-model-len 导致崩溃 ----
+            if len(accumulated_text) > self._max_context_chars:
+                self._logger.warning(
+                    f"搜索循环: 上下文长度 {len(accumulated_text)} 字符超过安全阈值 "
+                    f"{self._max_context_chars}，在第 {turn} 轮提前结束循环"
+                )
+                break
+
             # 提取搜索查询
             query = _extract_search_query(accumulated_text)
             if not query:
@@ -444,6 +469,14 @@ class SearchR1Runner(BaseTaskRunner):
             # 拼接搜索结果（对应 ray_trainer 中的 next_obs 拼接）
             search_block = f"\n\n<information>{search_result.strip()}</information>\n\n"
             accumulated_text += search_block
+
+            # 拼接后再次检查长度（搜索结果可能很长）
+            if len(accumulated_text) > self._max_context_chars:
+                self._logger.warning(
+                    f"搜索循环 Turn {turn + 1}: 拼接搜索结果后上下文 {len(accumulated_text)} 字符 "
+                    f"超过阈值 {self._max_context_chars}，提前结束循环"
+                )
+                break
 
             # 构建消息并继续调用 LLM
             messages = [
