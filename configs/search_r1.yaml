@@ -5,20 +5,27 @@
 # 任务类型
 task_type: search_r1
 metric_higher_is_better: true   # 新增：EM 评估，越大越好
-# PerfAgent 使用的 LLM（本地 vLLM server，对应 Search-R1 的 actor 模型）
-# 启动方式：
-#   python -m vllm.entrypoints.openai.api_server \
-#       --model /data/user/rli112/junjie/workspace/LLM_Agent/weight/SearchR1-nq_hotpotqa_train-qwen2.5-3b-em-grpo-v0.3 \
-#       --port 8000 --dtype bfloat16 --tensor-parallel-size 1
+# PerfAgent 使用的 LLM（本地 vLLM 推理，完全对齐 Search-R1 的 token 级续写）
+# 设置 local_model_path 后无需启动 vLLM server，模型在进程内直接加载
 model:
   name: SearchR1-nq_hotpotqa_train-qwen2.5-7b-it-em-grpo-v0.3
+  # 本地 vLLM 推理：设为模型权重路径即启用（推荐）
+  local_model_path: /data/user/rli112/junjie/workspace/LLM_Agent/weight/SearchR1-nq_hotpotqa_train-qwen2.5-7b-it-em-grpo-v0.3
+  gpu_memory_utilization: 0.6
+  tensor_parallel_size: 1
+  max_model_len: 25000
+  max_response_length: 5000
+  # Chat API fallback（当 local_model_path 未设置时使用）
   api_base: http://127.0.0.1:8000/v1
   api_key: "EMPTY"
   max_input_tokens: 25000
   max_output_tokens: 5000
   temperature: 0.7
 
-# 算子模型配置（用于轨迹总结等，可与 PerfAgent 模型相同或用更强的模型）
+# 算子模型配置（用于 Plan/Reflection/Crossover/Summarizer 等算子层 LLM 调用）
+# 这些算子不做检索推理，只做文本生成（策略规划、轨迹总结等）
+# 需要启动 vLLM API server：bash scripts/launch_vllm_server.sh
+# 注意：API server 和本地 vLLM 引擎需要在不同 GPU 上运行
 operator_models:
   name: SearchR1-nq_hotpotqa_train-qwen2.5-7b-it-em-grpo-v0.3
   api_base: http://127.0.0.1:8000/v1
@@ -116,28 +123,29 @@ prompt_config:
 
   reflection_refine:
     header: |
-      IMPORTANT: Your previous attempt gave a WRONG answer. The previous attempt is shown below.
+      IMPORTANT: Your previous attempt gave a WRONG answer. A condensed summary of the previous attempt is shown below.
       You MUST NOT repeat the same wrong answer. The answer shown below is INCORRECT.
       Try completely different search queries and reasoning to find the correct answer.
     guidelines: |
       Rules:
       1. The answer in the previous attempt is WRONG — NEVER give that same answer again.
       2. The information that led to that wrong answer may also be wrong — do NOT trust it.
-      3. Use DIFFERENT search queries than what was tried before. Search for each entity separately.
-      4. Carefully check dates, names, and facts in the search results before concluding.
-      5. Put your final answer inside <answer>...</answer> tags.
+      3. Use DIFFERENT search queries than what was tried before. The summary shows which queries were already tried — avoid repeating them.
+      4. Search for each entity separately. Try alternative names, spellings, or related terms.
+      5. Carefully check dates, names, and facts in the search results before concluding.
+      6. Put your final answer inside <answer>...</answer> tags.
 
   crossover:
     header: |
-      IMPORTANT: Two previous attempts are shown below. BOTH gave WRONG answers.
+      IMPORTANT: Condensed summaries of two previous attempts are shown below. BOTH gave WRONG answers.
       You MUST NOT repeat either wrong answer. Both answers shown below are INCORRECT.
-      Use any useful search results from both attempts, but reach a DIFFERENT conclusion.
+      Use any useful clues from both attempts, but reach a DIFFERENT conclusion.
     guidelines: |
       Rules:
       1. Both answers below are WRONG — NEVER give either of them as your answer.
       2. The information that led to those wrong answers may be incorrect — verify everything.
-      3. Look at what useful facts each attempt found, but do NOT trust their conclusions.
-      4. Try NEW search queries to find information that both attempts missed.
+      3. Review the search queries listed in the summaries — avoid repeating the same queries.
+      4. Try NEW search queries to find information that both attempts missed. Use different keywords, alternative names, or more specific terms.
       5. Carefully check dates, names, and facts before concluding.
       6. Put your final answer inside <answer>...</answer> tags.
 

@@ -68,9 +68,17 @@ class PerfAgent:
     使用 AgentRequest/AgentResult 协议与 SE_Perf 层通信。
     """
 
+    # 类级别单例：本地 vLLM 引擎在所有 PerfAgent 实例间共享，
+    # 避免每次迭代创建新 PerfAgent 时重复加载模型（vLLM 加载需 ~80s 且占满 GPU）。
+    _shared_local_engine = None        # LocalVLLMEngine 实例
+    _shared_local_engine_path = None   # 当前加载的模型路径（用于判断是否需要重新加载）
+
     def __init__(self, config: PerfAgentConfig, task_runner: BaseTaskRunner | None = None):
         self.config = config
         self.task_runner = task_runner
+
+        # 指向类级别共享引擎（不在实例上重新创建）
+        self._local_engine = None
 
         # 简化逻辑：凭据存在即初始化 LLMClient，无需 use_llm 标志
         self.llm_client = None
@@ -282,12 +290,67 @@ class PerfAgent:
     # 初始化
     # ==================================================================
 
+    def _ensure_local_engine(self):
+        """确保本地 vLLM 引擎已加载（延迟加载，类级别单例复用）。
+
+        vLLM 模型加载耗时约 80s 且占满 GPU 显存，每次迭代创建新 PerfAgent 实例
+        时不应重复加载。使用类变量 _shared_local_engine 在所有实例间共享引擎。
+        """
+        model_path = self.config.model.local_model_path
+        if not model_path:
+            return None
+
+        # 如果类级别已有加载好的引擎且路径一致，直接复用
+        cls = type(self)
+        if (cls._shared_local_engine is not None
+                and cls._shared_local_engine.is_loaded
+                and cls._shared_local_engine_path == model_path):
+            self._local_engine = cls._shared_local_engine
+            return self._local_engine
+
+        from perfagent.local_vllm import LocalVLLMEngine, LocalVLLMConfig
+
+        # 从 task_config 获取搜索相关配置
+        tc = self.config.task_config or {}
+
+        engine_config = LocalVLLMConfig(
+            model_path=model_path,
+            max_turns=tc.get("max_search_turns", 4),
+            max_response_length=getattr(self.config.model, "max_response_length", 1024),
+            max_prompt_length=getattr(self.config.model, "max_model_len", 8192),
+            max_obs_length=500,  # 与 Search-R1 默认一致（tokens）
+            temperature=self.config.model.temperature,
+            gpu_memory_utilization=getattr(self.config.model, "gpu_memory_utilization", 0.6),
+            tensor_parallel_size=getattr(self.config.model, "tensor_parallel_size", 1),
+            dtype="bfloat16",
+            max_model_len=getattr(self.config.model, "max_model_len", 8192),
+            search_url=tc.get("search_url", "http://127.0.0.1:8001/retrieve"),
+            topk=tc.get("topk", 3),
+            search_timeout=tc.get("timeout", 10),
+        )
+
+        engine = LocalVLLMEngine(engine_config, _logger=self.logger)
+        engine.load_model()
+
+        # 保存到类级别单例
+        cls._shared_local_engine = engine
+        cls._shared_local_engine_path = model_path
+        self._local_engine = engine
+        return self._local_engine
+
     def _init_run_context(self, instance_data: Any) -> RunContext:
         """初始化运行上下文"""
         runner = self._ensure_task_runner()
         instance_id = self._get_instance_id(instance_data)
 
-        # 注入 LLM client 到 TaskRunner（供 SearchR1Runner 的搜索循环使用）
+        # 优先注入本地 vLLM 引擎（完全对齐 Search-R1 的 token 级续写）
+        if hasattr(runner, 'set_local_engine'):
+            engine = self._ensure_local_engine()
+            if engine is not None:
+                runner.set_local_engine(engine)
+                self.logger.info("已注入本地 vLLM 引擎到 TaskRunner")
+
+        # 注入 LLM client 到 TaskRunner（作为 fallback，或供其他用途）
         if hasattr(runner, 'set_llm_client') and self.llm_client is not None:
             runner.set_llm_client(
                 self.llm_client,
@@ -387,7 +450,24 @@ class PerfAgent:
         # 2. 调用 LLM
         llm_phase_start = time.time()
         system_prompt = runner.build_system_prompt(ctx.instance_data, config=self.config)
-        optimization_response = self._call_llm(system_prompt, ctx.trajectory.history, opt_prompt)
+
+        # 如果 TaskRunner 配置了本地 vLLM 引擎，跳过 Chat API 调用
+        # （extract_solution 会直接使用本地引擎做 token 级续写，不需要 Chat API 的响应）
+        has_local_engine = (
+            hasattr(runner, '_local_engine')
+            and runner._local_engine is not None
+            and runner._local_engine.is_loaded
+        )
+        if has_local_engine:
+            # 传空字符串，extract_solution 会检测到 local engine 并忽略此参数
+            optimization_response = ""
+            self.logger.info("[LLM调用跳过] 使用本地 vLLM 引擎，无需 Chat API")
+        else:
+            # 获取 TaskRunner 指定的停止序列（如 SearchR1Runner 的 ["</search>"]）
+            stop_sequences = getattr(runner, 'llm_stop_sequences', None)
+            optimization_response = self._call_llm(
+                system_prompt, ctx.trajectory.history, opt_prompt, stop=stop_sequences
+            )
         llm_phase_elapsed = time.time() - llm_phase_start
 
         # 3. 通过 TaskRunner 提取新解
@@ -486,13 +566,20 @@ class PerfAgent:
     # LLM 调用
     # ==================================================================
 
-    def _call_llm(self, system_prompt: str, history: list[dict[str, Any]], user_prompt: str) -> str:
+    def _call_llm(
+        self,
+        system_prompt: str,
+        history: list[dict[str, Any]],
+        user_prompt: str,
+        stop: list[str] | None = None,
+    ) -> str:
         """调用 LLM 获取响应
 
         Args:
             system_prompt: 系统 prompt（由 TaskRunner 构建）
             history: 对话历史
             user_prompt: 用户 prompt（优化指令）
+            stop: 停止序列列表（由 TaskRunner.llm_stop_sequences 提供）
 
         Returns:
             LLM 响应文本
@@ -503,6 +590,7 @@ class PerfAgent:
             llm_start_time = time.time()
             self.logger.info(
                 f"[LLM调用开始] 时间: {datetime.now().strftime('%H:%M:%S')}, 模型: {self.config.model.name}"
+                + (f", stop={stop}" if stop else "")
             )
             try:
                 response = self.llm_client.call_llm(
@@ -510,6 +598,7 @@ class PerfAgent:
                     temperature=self.config.model.temperature,
                     max_tokens=self.config.model.max_output_tokens,
                     usage_context="perfagent.optimize",
+                    stop=stop,
                 )
                 llm_elapsed = time.time() - llm_start_time
                 self.logger.info(
@@ -780,6 +869,9 @@ class PerfAgent:
                 lines.append(f"- {k}: {v}")
         return "\n".join(lines)
 
+    # summary_text 中 solution 的最大字符数（防止对话历史膨胀）
+    _SUMMARY_SOLUTION_MAX_CHARS: int = 2000
+
     def _build_summary_text(
         self,
         iteration: int,
@@ -789,7 +881,11 @@ class PerfAgent:
         artifacts: dict[str, Any] | None = None,
         error_message: str | None = None,
     ) -> str:
-        """构建一步迭代的 Markdown 摘要文本"""
+        """构建一步迭代的 Markdown 摘要文本
+
+        对于长的 solution（如 Search-R1 多轮搜索轨迹），自动精炼以防止
+        对话历史膨胀导致上下文过长。
+        """
         parts: list[str] = [
             "## Program Update",
             f"- Iteration: {iteration}",
@@ -803,8 +899,19 @@ class PerfAgent:
             parts.append(f"- Error: {error_message}")
 
         parts.append("")
-        parts.append("## Current Solution")
-        parts.append(solution or "")
+        # 对过长的 solution 进行精炼
+        sol = solution or ""
+        if len(sol) > self._SUMMARY_SOLUTION_MAX_CHARS:
+            runner = self._ensure_task_runner()
+            if hasattr(runner, '_condense_trajectory_for_prompt'):
+                parts.append("## Current Solution (condensed)")
+                parts.append(runner._condense_trajectory_for_prompt(sol, max_chars=self._SUMMARY_SOLUTION_MAX_CHARS))
+            else:
+                parts.append("## Current Solution")
+                parts.append(sol[:self._SUMMARY_SOLUTION_MAX_CHARS] + "\n... [truncated]")
+        else:
+            parts.append("## Current Solution")
+            parts.append(sol)
 
         if artifacts:
             parts.append("")

@@ -63,7 +63,21 @@ def get_logger(name: str, *, emoji: str = "") -> logging.Logger:
         name = name + "-" + _THREAD_NAME_TO_LOG_SUFFIX.get(thread_name, thread_name)
     logger = logging.getLogger(name)
     if logger.hasHandlers():
-        # Already set up
+        # Already set up with stream handler, but we still need to ensure:
+        # 1. This logger is tracked in _SET_UP_LOGGERS (so future add_file_handler calls find it)
+        # 2. Any file handlers added after this logger's initial creation are attached
+        _SET_UP_LOGGERS.add(name)
+        with _LOG_LOCK:
+            existing_handlers = set(id(h) for h in logger.handlers)
+            for additional_handler in _ADDITIONAL_HANDLERS.values():
+                if id(additional_handler) not in existing_handlers:
+                    my_filter = getattr(additional_handler, "my_filter", None)
+                    if my_filter is None:
+                        logger.addHandler(additional_handler)
+                    elif isinstance(my_filter, str) and my_filter in name:
+                        logger.addHandler(additional_handler)
+                    elif callable(my_filter) and my_filter(name):
+                        logger.addHandler(additional_handler)
         return logger
     handler = _RichHandlerWithEmoji(
         emoji=emoji,

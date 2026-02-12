@@ -45,7 +45,10 @@ class ReflectionRefineOperator(BaseOperator):
         if chosen:
             traj = instance_entry.trajectories.get(chosen[0])
             if traj is not None:
-                src_summary = self._format_entry(InstanceTrajectories(trajectories={chosen[0]: traj}))
+                src_summary = self._format_entry(
+                    InstanceTrajectories(trajectories={chosen[0]: traj}),
+                    pool_entry=instance_entry,
+                )
                 used_labels = [chosen[0]]
                 self.logger.info(f" reflection_refine: 从 chosen 选择了轨迹，生成摘要")
             else:
@@ -57,7 +60,10 @@ class ReflectionRefineOperator(BaseOperator):
             if keys:
                 traj = instance_entry.trajectories.get(keys[0])
                 if traj is not None:
-                    src_summary = self._format_entry(InstanceTrajectories(trajectories={keys[0]: traj}))
+                    src_summary = self._format_entry(
+                        InstanceTrajectories(trajectories={keys[0]: traj}),
+                        pool_entry=instance_entry,
+                    )
                     used_labels = [keys[0]]
                     self.logger.info(f" reflection_refine: 从采样选择轨迹，生成摘要")
                 else:

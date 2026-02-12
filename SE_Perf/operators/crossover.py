@@ -52,8 +52,14 @@ class CrossoverOperator(BaseOperator):
             self.logger.warning(f" crossover 算子: traj1 或 traj2 为 None，跳过")
             return OperatorResult(source_labels=used)
 
-        summary1 = self._format_entry(InstanceTrajectories(trajectories={pick1 or "iter1": traj1}))
-        summary2 = self._format_entry(InstanceTrajectories(trajectories={pick2 or "iter2": traj2}))
+        summary1 = self._format_entry(
+            InstanceTrajectories(trajectories={pick1 or "iter1": traj1}),
+            pool_entry=instance_entry,
+        )
+        summary2 = self._format_entry(
+            InstanceTrajectories(trajectories={pick2 or "iter2": traj2}),
+            # 第二条不再重复附加池级汇总，避免冗余
+        )
 
         self.logger.info(f" crossover 算子: has_problem_description={bool(problem_description)}, has_summary1={bool(summary1)}, has_summary2={bool(summary2)}")
 

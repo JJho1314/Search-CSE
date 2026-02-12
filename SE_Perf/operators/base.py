@@ -217,8 +217,25 @@ class BaseOperator(abc.ABC):
             self.logger.error(f"LLM API调用失败: {e}")
             return ""
             
-    def _format_entry(self, entry: InstanceTrajectories) -> str:
-        return TrajPoolManager.format_entry(entry)
+    def _format_entry(
+        self,
+        entry: InstanceTrajectories,
+        pool_entry: InstanceTrajectories | None = None,
+    ) -> str:
+        """格式化单条轨迹条目为可读文本。
+
+        Args:
+            entry: 要格式化的单条轨迹（InstanceTrajectories 包装）。
+            pool_entry: 可选，整个轨迹池数据。若提供，会附加池级别的失败经验汇总，
+                        帮助后续 LLM 避免重复已知错误。
+        """
+        formatted = TrajPoolManager.format_entry(entry)
+        # 如果提供了完整轨迹池，附加失败经验汇总
+        if pool_entry is not None:
+            failure_summary = TrajPoolManager.summarize_pool_failures(pool_entry)
+            if failure_summary:
+                formatted = formatted + "\n\n" + failure_summary
+        return formatted
 
     def _weighted_select_labels(
         self, entry: InstanceTrajectories, k: int = 1, allowed_labels: list[str] | None = None

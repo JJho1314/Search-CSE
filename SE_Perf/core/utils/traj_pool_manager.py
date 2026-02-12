@@ -710,12 +710,96 @@ class TrajPoolManager:
     # 格式化工具（静态方法，被多处引用）
     # -----------------------------------------------------------------------
 
+    # solution 在 format_entry 中的最大字符数；超出则截断并用摘要替代
+    _SOLUTION_MAX_CHARS: int = 1500
+
+    @staticmethod
+    def _condense_search_trajectory(solution: str, max_chars: int = 1500) -> str:
+        """将长的多轮搜索轨迹精炼为紧凑版本。
+
+        策略：
+        1. 提取每轮的 search query 和最终 answer
+        2. 对中间搜索结果只保留关键信息（标题），去掉大段文档内容
+        3. 保留 <think> 中的关键推理，但去掉冗余重复
+
+        Args:
+            solution: 完整的搜索轨迹文本。
+            max_chars: 最大字符数。
+
+        Returns:
+            精炼后的轨迹文本。
+        """
+        import re as _re
+
+        if not solution or len(solution) <= max_chars:
+            return solution
+
+        parts: list[str] = []
+
+        # 提取所有搜索查询
+        queries = _re.findall(r"<search>(.*?)</search>", solution, _re.DOTALL)
+        # 提取最终答案
+        answer_match = _re.search(r"<answer>(.*?)</answer>", solution, _re.DOTALL)
+        answer = answer_match.group(1).strip() if answer_match else None
+        # 提取所有 think 块（只取最后一个较长的作为关键推理）
+        thinks = _re.findall(r"<think>(.*?)</think>", solution, _re.DOTALL)
+
+        if queries:
+            parts.append(f"Search queries tried ({len(queries)} total):")
+            seen_queries: set[str] = set()
+            for i, q in enumerate(queries, 1):
+                q_stripped = q.strip()
+                if q_stripped not in seen_queries:
+                    parts.append(f"  {i}. {q_stripped}")
+                    seen_queries.add(q_stripped)
+                else:
+                    parts.append(f"  {i}. {q_stripped} (repeated)")
+
+        # 提取搜索结果中的文档标题（不保留全文）
+        info_blocks = _re.findall(r"<information>(.*?)</information>", solution, _re.DOTALL)
+        if info_blocks:
+            parts.append(f"\nKey information found ({len(info_blocks)} search results):")
+            for i, info in enumerate(info_blocks, 1):
+                # 提取文档标题
+                titles = _re.findall(r'Title:\s*"?([^")\n]+)', info)
+                if titles:
+                    parts.append(f"  Result {i}: {'; '.join(t.strip() for t in titles[:3])}")
+                elif info.strip() and len(info.strip()) > 10:
+                    # 无标题则取前 80 字符摘要
+                    snippet = info.strip()[:80].replace("\n", " ")
+                    parts.append(f"  Result {i}: {snippet}...")
+                else:
+                    parts.append(f"  Result {i}: [No significant information found]")
+
+        # 保留最后一段关键推理
+        if thinks:
+            # 取最长的 think 作为关键推理
+            key_think = max(thinks, key=len).strip()
+            if len(key_think) > 300:
+                key_think = key_think[:300] + "..."
+            parts.append(f"\nKey reasoning:\n  {key_think}")
+
+        if answer:
+            parts.append(f"\nFinal answer: {answer}")
+        else:
+            parts.append("\nFinal answer: [No answer provided]")
+
+        condensed = "\n".join(parts)
+        # 如果精炼后仍然很长，做最终截断
+        if len(condensed) > max_chars:
+            condensed = condensed[:max_chars] + "\n... [condensed trajectory truncated]"
+        return condensed
+
     @staticmethod
     def format_entry(data: Any, include_keys: set[str] | None = None) -> str:
         """格式化轨迹条目为可读文本。
 
         接受 InstanceTrajectories 或兼容的 dict（向后兼容）。
         选取最新迭代的轨迹并格式化输出。
+
+        对于 Search-R1 类多轮搜索轨迹，如果 solution 过长：
+        - 优先使用 summary 中的 approach_summary 代替完整 solution
+        - 否则自动精炼搜索轨迹（提取查询、关键信息、答案）
 
         Args:
             data: InstanceTrajectories 对象或原始 dict。
@@ -781,6 +865,34 @@ class TrajPoolManager:
         else:
             return ""
 
+        # ---- 预处理：精炼过长的 solution ----
+        solution_val = latest_data.get("solution", "")
+        summary_val = latest_data.get("summary")
+        max_chars = TrajPoolManager._SOLUTION_MAX_CHARS
+
+        if isinstance(solution_val, str) and len(solution_val) > max_chars:
+            # 尝试从 summary 提取精炼描述
+            approach_summary = None
+            if isinstance(summary_val, dict):
+                approach_summary = summary_val.get("approach_summary")
+            if approach_summary and isinstance(approach_summary, str) and len(approach_summary) > 20:
+                # 有可用的 summary，用它来替代完整 solution
+                # 同时提取原始 solution 中的 answer
+                answer_match = re.search(r"<answer>(.*?)</answer>", solution_val, re.DOTALL)
+                answer_str = answer_match.group(1).strip() if answer_match else "[No answer]"
+                latest_data = dict(latest_data)  # 避免修改原始数据
+                latest_data["solution"] = (
+                    f"[Condensed from {len(solution_val)} chars]\n"
+                    f"Approach: {approach_summary}\n"
+                    f"Answer given: {answer_str}"
+                )
+            else:
+                # 无 summary，自动精炼搜索轨迹
+                latest_data = dict(latest_data)
+                latest_data["solution"] = TrajPoolManager._condense_search_trajectory(
+                    solution_val, max_chars=max_chars
+                )
+
         # ---- 格式化 ----
         def indent_str(level: int) -> str:
             return "  " * level
@@ -829,3 +941,119 @@ class TrajPoolManager:
         header = str(chosen_label or latest_key).strip()
         body = fmt_value(latest_data, 0)
         return f"{header}\n{body}".strip() if header else body
+
+    # -----------------------------------------------------------------------
+    # 轨迹池级别的失败经验汇总
+    # -----------------------------------------------------------------------
+
+    @staticmethod
+    def summarize_pool_failures(pool_data: Any) -> str:
+        """从整个轨迹池中汇总失败经验，返回结构化的文本摘要。
+
+        通用方法，不绑定任何特定任务类型。遍历所有轨迹条目，
+        收集失败的尝试信息（答案/方案、失败原因、搜索策略），
+        生成一段可直接注入 prompt 的失败经验总结。
+
+        Args:
+            pool_data: InstanceTrajectories 对象、原始 dict 或类似结构。
+
+        Returns:
+            失败经验汇总文本；若无失败记录则返回空字符串。
+        """
+        # ---- 统一获取所有轨迹条目 ----
+        entries: list[dict] = []
+
+        if hasattr(pool_data, "trajectories"):
+            for _k, traj in pool_data.trajectories.items():
+                d = traj.to_dict() if hasattr(traj, "to_dict") else {}
+                extras = traj.extras if hasattr(traj, "extras") else {}
+                # 合并 extras 到 dict 中（extras 中可能有 artifacts 等）
+                merged = {**d, **extras}
+                if hasattr(traj, "metric"):
+                    merged["metric"] = traj.metric
+                entries.append(merged)
+        elif isinstance(pool_data, dict):
+            for k, v in pool_data.items():
+                if k == "problem" or not isinstance(v, dict):
+                    continue
+                entries.append(v)
+
+        if not entries:
+            return ""
+
+        # ---- 收集失败信息 ----
+        failed_answers: list[str] = []       # 去重的失败答案
+        failed_strategies: list[str] = []    # 去重的失败策略摘要
+        failed_reasons: list[str] = []       # 去重的失败原因
+        seen_answers: set[str] = set()
+        seen_strategies: set[str] = set()
+        seen_reasons: set[str] = set()
+        total_failed = 0
+        total_success = 0
+
+        for entry in entries:
+            metric = entry.get("metric")
+            try:
+                metric_val = float(metric) if metric is not None else None
+            except (ValueError, TypeError):
+                metric_val = None
+
+            if metric_val is not None and metric_val >= 1.0:
+                total_success += 1
+                continue
+
+            total_failed += 1
+
+            # 提取失败答案
+            artifacts = entry.get("artifacts") or {}
+            ans = artifacts.get("extracted_answer")
+            if ans and isinstance(ans, str) and ans.strip() and ans.strip().lower() != "none":
+                norm_ans = ans.strip()
+                if norm_ans not in seen_answers:
+                    seen_answers.add(norm_ans)
+                    failed_answers.append(norm_ans)
+
+            # 提取失败原因
+            reason = artifacts.get("failure_reason")
+            if reason and isinstance(reason, str) and reason.strip():
+                norm_reason = reason.strip()
+                if norm_reason not in seen_reasons:
+                    seen_reasons.add(norm_reason)
+                    failed_reasons.append(norm_reason)
+
+            # 提取失败策略摘要（从 summary 字段）
+            summary = entry.get("summary")
+            if isinstance(summary, dict):
+                approach = summary.get("approach_summary")
+                if approach and isinstance(approach, str) and len(approach) > 10:
+                    # 取前 120 字符作为策略标识，用于去重
+                    norm_strat = approach.strip()[:120]
+                    if norm_strat not in seen_strategies:
+                        seen_strategies.add(norm_strat)
+                        failed_strategies.append(approach.strip())
+
+        # ---- 如果没有失败记录，返回空 ----
+        if total_failed == 0 or not failed_answers:
+            return ""
+
+        # ---- 构建汇总文本 ----
+        parts: list[str] = []
+        parts.append(f"### Pool Failure Summary ({total_failed} failed, {total_success} succeeded)")
+
+        # 失败答案列表
+        parts.append(f"\nFailed answers tried ({len(failed_answers)} unique, ALL WRONG):")
+        for i, ans in enumerate(failed_answers, 1):
+            parts.append(f"  {i}. \"{ans}\"")
+        parts.append("DO NOT repeat any of the above answers.")
+
+        # 失败策略摘要（最多 5 条，避免过长）
+        if failed_strategies:
+            parts.append(f"\nFailed approaches tried ({len(failed_strategies)} unique):")
+            for i, strat in enumerate(failed_strategies[:5], 1):
+                # 每条策略截断到 150 字符
+                truncated = strat if len(strat) <= 150 else strat[:150] + "..."
+                parts.append(f"  {i}. {truncated}")
+            if len(failed_strategies) > 5:
+                parts.append(f"  ... and {len(failed_strategies) - 5} more failed approaches")
+
+        return "\n".join(parts)

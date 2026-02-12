@@ -110,12 +110,14 @@ def main():
 
         # 4. 初始化核心组件
 
-        # LLM Client
+        # LLM Client（算子层 / 轨迹总结用，优先使用 operator_models 配置）
         llm_client = None
         try:
             from core.utils.llm_client import LLMClient
 
-            llm_client = LLMClient(se_cfg.model.to_dict())
+            operator_model_cfg = se_cfg.extras.get("operator_models")
+            llm_model_cfg = operator_model_cfg if isinstance(operator_model_cfg, dict) and operator_model_cfg else se_cfg.model.to_dict()
+            llm_client = LLMClient(llm_model_cfg)
         except Exception as e:
             logger.warning(f"LLM客户端初始化失败: {e}")
 

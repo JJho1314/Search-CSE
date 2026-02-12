@@ -137,9 +137,13 @@ def run_single_instance(
         os.environ["SE_LLM_IO_LOG_PATH"] = str(Path(instance_output) / "llm_io.jsonl")
 
         # 4. 初始化组件
+        # 算子层 / 轨迹总结用的 LLM client：优先用 operator_models（API 模式），
+        # 与 PerfAgent 的本地 vLLM 推理引擎分离。
         llm_client = None
+        operator_model_cfg = se_cfg.extras.get("operator_models")
+        llm_model_cfg = operator_model_cfg if isinstance(operator_model_cfg, dict) and operator_model_cfg else se_cfg.model.to_dict()
         try:
-            llm_client = LLMClient(se_cfg.model.to_dict())
+            llm_client = LLMClient(llm_model_cfg)
         except Exception as e:
             logger.warning(f"LLM客户端初始化失败: {e}")
 

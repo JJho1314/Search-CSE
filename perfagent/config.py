@@ -23,6 +23,15 @@ class ModelConfig:
     max_input_tokens: int = 4000
     max_output_tokens: int = 4000
     use_llm: bool = False
+    # 本地 vLLM 推理（优先于 API 模式，完全对齐 Search-R1 的 token 级续写）
+    # 设为模型权重目录路径即可启用，例如：
+    #   local_model_path: /data/.../weight/SearchR1-nq_hotpotqa_train-qwen2.5-7b-em-grpo-v0.3
+    local_model_path: str | None = None
+    # vLLM 推理参数
+    gpu_memory_utilization: float = 0.6
+    tensor_parallel_size: int = 1
+    max_model_len: int = 8192
+    max_response_length: int = 1024  # 每轮最大生成 token 数
     # LLM 客户端增强参数
     request_timeout: float = 60.0
     max_retries: int = 10

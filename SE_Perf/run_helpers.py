@@ -89,7 +89,15 @@ def build_perf_agent_config(
         config = PerfAgentConfig()
 
     # 应用 SE 模型配置覆盖
-    allowed_model_keys = {"name", "api_base", "api_key", "max_input_tokens", "max_output_tokens", "temperature"}
+    # 包含本地 vLLM 推理相关的键，使 SE config 能完整覆盖 base_config 的模型配置
+    allowed_model_keys = {
+        "name", "api_base", "api_key", "max_input_tokens", "max_output_tokens", "temperature",
+        # 本地 vLLM 推理配置
+        "local_model_path", "gpu_memory_utilization", "tensor_parallel_size",
+        "max_model_len", "max_response_length",
+        # LLM 客户端参数
+        "request_timeout", "max_retries", "retry_delay",
+    }
     for key, val in (se_model_config or {}).items():
         if key in allowed_model_keys and val is not None and str(val).strip():
             setattr(config.model, key, val)
@@ -104,14 +112,27 @@ def build_perf_agent_config(
 
 
 def build_operator_context(se_cfg: SEPerfRunSEConfig, step: StepConfig) -> OperatorContext:
-    """从 SE 配置和步骤配置构建 OperatorContext。"""
+    """从 SE 配置和步骤配置构建 OperatorContext。
+
+    算子层（Plan/Reflection/Crossover/Summarizer）的 LLM 调用使用 API 模式：
+    - 优先使用 operator_models 配置（独立于 PerfAgent 的搜索推理模型）
+    - 如果未配置 operator_models，回退到 model 配置的 API 部分
+    """
     # prompt_config: 步骤级覆盖 > SE 全局配置；OperatorContext 仍使用 dict 以兼容算子
     if step.prompt_config is not None:
         pc = step.prompt_config.to_dict()
     else:
         pc = se_cfg.prompt_config.to_dict()
+
+    # 算子层模型配置：优先用 operator_models（在 extras 里），否则回退到 model
+    operator_model_cfg = se_cfg.extras.get("operator_models")
+    if isinstance(operator_model_cfg, dict) and operator_model_cfg:
+        model_cfg = operator_model_cfg
+    else:
+        model_cfg = se_cfg.model.to_dict()
+
     return OperatorContext(
-        model_config=se_cfg.model.to_dict(),
+        model_config=model_cfg,
         prompt_config=pc,
         selection_mode=step.selection_mode or "weighted",
         metric_higher_is_better=se_cfg.metric_higher_is_better,

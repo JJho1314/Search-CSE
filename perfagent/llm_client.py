@@ -144,6 +144,7 @@ class LLMClient:
         temperature: float = 0.3,
         max_tokens: int | None = None,
         usage_context: str | None = None,
+        stop: list[str] | None = None,
     ) -> str:
         """
         调用LLM并返回响应内容
@@ -152,6 +153,8 @@ class LLMClient:
             messages: 消息列表，每个消息包含role和content
             temperature: 温度参数，控制输出随机性
             max_tokens: 最大输出token数，None表示使用配置默认值
+            stop: 停止序列列表，模型生成到这些序列时立即停止
+                  （对应 Search-R1 的 StopOnSequence 机制）
 
         Returns:
             LLM响应的文本内容
@@ -226,12 +229,19 @@ class LLMClient:
                 # 不使用额外参数，避免服务器错误
                 self.logger.debug(f"调用模型: {model_name}, max_tokens={max_tokens}")
 
-                response = self.client.chat.completions.create(
-                    model=model_name,
-                    messages=messages,
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                )
+                # 构建 API 调用参数
+                api_kwargs: dict = {
+                    "model": model_name,
+                    "messages": messages,
+                    "temperature": temperature,
+                    "max_tokens": max_tokens,
+                }
+                # 传递 stop 参数（如果提供）
+                # 对应 Search-R1 中 StopOnSequence 的 token 级停止机制
+                if stop:
+                    api_kwargs["stop"] = stop
+
+                response = self.client.chat.completions.create(**api_kwargs)
 
                 # 检查响应是否有效 - 空 choices 视为可重试错误
                 if not response.choices:

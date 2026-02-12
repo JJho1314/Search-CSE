@@ -9,9 +9,19 @@ adopt_only_if_improved: false
 # Search-R1 的 TaskRunner 返回 EM reward（1.0=正确，0.0=错误）
 metric_higher_is_better: true
 
-# 模型配置（本地 vLLM server）
+# 模型配置
+# 优先使用 local_model_path（本地 vLLM 推理，完全对齐 Search-R1 的 token 级续写）
+# 如果未设置 local_model_path，则回退到 api_base（vLLM OpenAI 兼容 API）
 model:
   name: SearchR1-nq_hotpotqa_train-qwen2.5-3b-em-grpo-v0.3
+  # 本地 vLLM 推理：设为模型权重路径即启用（推荐，与 Search-R1 完全对齐）
+  local_model_path: /data/user/rli112/junjie/workspace/LLM_Agent/weight/SearchR1-nq_hotpotqa_train-qwen2.5-3b-em-grpo-v0.3
+  # vLLM 推理参数
+  gpu_memory_utilization: 0.6
+  tensor_parallel_size: 1
+  max_model_len: 25000
+  max_response_length: 4096   # 每轮最大生成 token 数
+  # Chat API fallback（当 local_model_path 未设置时使用）
   api_base: http://127.0.0.1:8000/v1
   api_key: "EMPTY"
   temperature: 0.7
@@ -67,3 +77,6 @@ task_config:
   # 对应 evaluate.sh 中的 max_turns=4
   max_search_turns: 4
   timeout: 10
+  # 搜索结果最大字符数，对应 Search-R1 的 max_obs_length=500 tokens
+  # 500 tokens ≈ 2000 字符（英文为主），防止 <information> 块过长
+  max_obs_chars: 2000

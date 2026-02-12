@@ -47,6 +47,7 @@ dependencies = [
     "chromadb",
     "pre-commit",
     "PyYAML",
+    "tokenizers==0.21.4",
 ]
 
 [project.optional-dependencies]
