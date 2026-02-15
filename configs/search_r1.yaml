@@ -15,7 +15,7 @@ model:
   api_base: http://127.0.0.1:8000/v1
   api_key: "EMPTY"
   max_input_tokens: 25000
-  max_output_tokens: 5000
+  max_output_tokens: 3000
   temperature: 0.7
 
 # 算子模型配置（用于轨迹总结等，可与 PerfAgent 模型相同或用更强的模型）
@@ -24,7 +24,7 @@ operator_models:
   api_base: http://127.0.0.1:8000/v1
   api_key: "EMPTY"
   max_input_tokens: 25000
-  max_output_tokens: 5000
+  max_output_tokens: 3000
   temperature: 0.7
 
 operator_selection_mode: weighted
@@ -88,16 +88,22 @@ prompt_config:
       - <information>...</information> contains search results returned by the engine
       - <answer>...</answer> to provide the final answer
 
-      Your goal is to summarize the agent's search and reasoning journey: what queries were tried,
-      what information was found, how the reasoning evolved, and whether the final answer is correct.
+      Your goal is to OBJECTIVELY summarize the agent's search and reasoning journey: what queries
+      were tried, what information was found, and how the reasoning evolved.
+
+      CRITICAL RULES:
+      1. You do NOT know what the correct answer is. Do NOT guess or assert what the correct answer should be.
+      2. If the agent's metric is 0.0, the answer was WRONG. Do NOT say "the answer is correct" or
+         suggest what the correct answer should be — you simply do not have that information.
+      3. Focus on FACTUAL observations: what was searched, what was found, what reasoning steps were taken.
+      4. Do NOT write statements like "the correct answer is X" or "the answer should be Y".
 
       Return your analysis in JSON format with:
       - "solution_name": A short nickname for the search strategy used (e.g., "direct_search", "multi_hop_v2", "entity_chain")
-      - "approach_summary": High-level narrative of the search and reasoning journey
-      - "search_queries": List of search queries used and their effectiveness
-      - "reasoning_quality": Assessment of the reasoning chain (logical, missed connections, etc.)
-      - "answer_quality": Whether the final answer directly addresses the question
-      - "key_learnings": Insights about effective search strategies for this type of question
+      - "approach_summary": High-level FACTUAL narrative of what the agent did (searches performed, information found, reasoning steps taken). Do NOT judge whether conclusions are correct.
+      - "search_queries": List of search queries used (just the queries, as strings)
+      - "information_found": Key facts extracted from search results (objective, no judgment)
+      - "answer_given": The exact answer the agent provided (just state it, no judgment on correctness)
 
     user_prompt_template: |
       Analyze the following search-augmented QA trajectory. The agent's goal was to answer the question
@@ -126,6 +132,7 @@ prompt_config:
       3. Use DIFFERENT search queries than what was tried before. Search for each entity separately.
       4. Carefully check dates, names, and facts in the search results before concluding.
       5. Put your final answer inside <answer>...</answer> tags.
+      6. IMPORTANT: Your answer MUST be a short, direct entity name or value — NOT a full sentence. For example: <answer> Giuseppe Cesari </answer>, NOT <answer> Giuseppe Cesari lived longer </answer>.
 
   crossover:
     header: |
@@ -140,6 +147,7 @@ prompt_config:
       4. Try NEW search queries to find information that both attempts missed.
       5. Carefully check dates, names, and facts before concluding.
       6. Put your final answer inside <answer>...</answer> tags.
+      7. IMPORTANT: Your answer MUST be a short, direct entity name or value — NOT a full sentence. For example: <answer> Giuseppe Cesari </answer>, NOT <answer> Giuseppe Cesari lived longer </answer>.
 
 max_iterations: 1 # This config defines a single, multi-step iteration.
 
@@ -227,22 +235,22 @@ strategy:
     - operator: "reflection_refine"
       trajectory_label: "iter2_sol5"
 
-    # Step 6: Crossover
-    - operator: "crossover"
-      trajectory_label: "iter2_sol6"
+    # # Step 6: Crossover
+    # - operator: "crossover"
+    #   trajectory_label: "iter2_sol6"
 
-    # Step 7: Reflection and Refine
-    - operator: "reflection_refine"
-      trajectory_label: "iter2_sol7"
+    # # Step 7: Reflection and Refine
+    # - operator: "reflection_refine"
+    #   trajectory_label: "iter2_sol7"
 
-    # Step 8: Crossover
-    - operator: "crossover"
-      trajectory_label: "iter2_sol8"
+    # # Step 8: Crossover
+    # - operator: "crossover"
+    #   trajectory_label: "iter2_sol8"
 
-    # Step 9: Reflection and Refine
-    - operator: "reflection_refine"
-      trajectory_label: "iter2_sol9"
+    # # Step 9: Reflection and Refine
+    # - operator: "reflection_refine"
+    #   trajectory_label: "iter2_sol9"
 
-    # Step 10: Crossover
-    - operator: "crossover"
-      trajectory_label: "iter2_sol10"
+    # # Step 10: Crossover
+    # - operator: "crossover"
+    #   trajectory_label: "iter2_sol10"

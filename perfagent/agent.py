@@ -391,6 +391,9 @@ class PerfAgent:
         llm_phase_elapsed = time.time() - llm_phase_start
 
         # 3. 通过 TaskRunner 提取新解
+        # 对 SearchR1Runner：注入当前 user prompt，供搜索循环构造续写消息
+        if hasattr(runner, '_current_user_prompt'):
+            runner._current_user_prompt = system_prompt
         extract_start = time.time()
         new_solution = runner.extract_solution(optimization_response, ctx.current_solution)
         extract_elapsed = time.time() - extract_start
