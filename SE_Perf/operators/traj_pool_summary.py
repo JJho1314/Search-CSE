@@ -42,7 +42,7 @@ class TrajPoolSummaryOperator(TemplateOperator):
         if not problem_statement:
             return OperatorResult()
 
-        content = self._build_additional_requirements(str(problem_statement), instance_entry.trajectories)
+        content = self._build_additional_requirements(str(problem_statement), instance_entry.trajectories, instance_entry)
         if not content:
             return OperatorResult()
 
@@ -114,7 +114,12 @@ class TrajPoolSummaryOperator(TemplateOperator):
                 parts.append(body)
         return "\n".join(parts)
 
-    def _build_additional_requirements(self, problem_statement: str, trajectories: dict[str, TrajectoryItem]) -> str:
+    def _build_additional_requirements(
+        self,
+        problem_statement: str,
+        trajectories: dict[str, TrajectoryItem],
+        instance_entry: InstanceTrajectories | None = None,
+    ) -> str:
         formatted_attempts = self._format_approaches_data(trajectories)
         pcfg = self.context.prompt_config or {}
         opcfg = pcfg.get("traj_pool_summary", {}) if isinstance(pcfg, dict) else {}
@@ -123,6 +128,14 @@ class TrajPoolSummaryOperator(TemplateOperator):
         )
         prob = textwrap.indent(str(problem_statement).strip(), "  ")
         attempts = textwrap.indent(formatted_attempts.strip(), "  ")
+
+        # 注入历史错误答案黑名单
+        failed_section = ""
+        if instance_entry is not None:
+            failed_summary = self._build_failed_answers_summary(instance_entry)
+            if failed_summary:
+                failed_section = "\n" + failed_summary + "\n"
+
         body = (
             opcfg.get("guidance")
             or pcfg.get("traj_pool_summary_guidance")
@@ -134,7 +147,7 @@ class TrajPoolSummaryOperator(TemplateOperator):
                 "4. Keep code simple, correct, and maintainable.\n"
             )
         )
-        return f"{header}\n\nPROBLEM:\n{prob}\n\nHISTORY COMPONENTS:\n{attempts}\n\n{body}".strip()
+        return f"{header}\n\nPROBLEM:\n{prob}\n{failed_section}\nHISTORY COMPONENTS:\n{attempts}\n\n{body}".strip()
 
 
 # 注册算子

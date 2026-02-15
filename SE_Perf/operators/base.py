@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import abc
 import random
+import re
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -219,6 +220,95 @@ class BaseOperator(abc.ABC):
             
     def _format_entry(self, entry: InstanceTrajectories) -> str:
         return TrajPoolManager.format_entry(entry)
+
+    def _build_failed_answers_summary(
+        self,
+        instance_entry: InstanceTrajectories,
+        exclude_labels: list[str] | None = None,
+    ) -> str:
+        """从所有历史轨迹中提取失败答案，构建错误答案黑名单摘要。
+
+        遍历 instance_entry 中的全部轨迹，收集 metric==0 或 artifacts 中标记失败的条目，
+        去重后生成一段文本供下一次迭代参考，避免模型重复犯同样的错误。
+
+        Args:
+            instance_entry: 当前实例在轨迹池中的所有轨迹。
+            exclude_labels: 可选，需排除的标签列表。
+
+        Returns:
+            格式化后的失败答案摘要文本；若无失败记录则返回空字符串。
+        """
+        exclude = set(exclude_labels or [])
+        # 收集: (answer, failure_reason, iteration, label)
+        failed_records: list[tuple[str, str, int | None, str]] = []
+        seen_answers: dict[str, list[str]] = {}  # answer -> [failure_reasons]
+
+        for key, traj in instance_entry.trajectories.items():
+            if key in exclude:
+                continue
+            # 判断是否失败
+            metric = traj.metric
+            extras = traj.extras or {}
+            artifacts = extras.get("artifacts") or {}
+            if isinstance(traj.summary, dict):
+                artifacts = artifacts or traj.summary.get("artifacts") or {}
+
+            is_failed = False
+            if metric is not None and metric == 0.0:
+                is_failed = True
+            if artifacts.get("em_match") is False or artifacts.get("subem_match") is False:
+                is_failed = True
+
+            if not is_failed:
+                continue
+
+            # 提取答案和失败原因
+            answer = artifacts.get("extracted_answer") or ""
+            if not answer:
+                # 尝试从 solution 中提取 <answer>...</answer>
+                sol = traj.solution or ""
+                m = re.search(r"<answer>\s*(.*?)\s*</answer>", sol, re.DOTALL)
+                if m:
+                    answer = m.group(1).strip()
+            if not answer:
+                continue
+
+            failure_reason = artifacts.get("failure_reason") or "Unknown"
+            iteration = extras.get("iteration")
+            try:
+                iteration = int(iteration) if iteration is not None else None
+            except (ValueError, TypeError):
+                iteration = None
+
+            failed_records.append((answer, failure_reason, iteration, key))
+            if answer not in seen_answers:
+                seen_answers[answer] = []
+            if failure_reason not in seen_answers[answer]:
+                seen_answers[answer].append(failure_reason)
+
+        if not seen_answers:
+            return ""
+
+        # 构建摘要
+        lines: list[str] = []
+        lines.append("### HISTORICAL FAILED ANSWERS (DO NOT REPEAT)")
+        lines.append(f"The following answers have been tried in {len(failed_records)} previous attempt(s) and were ALL WRONG:")
+        lines.append("")
+        for i, (answer, reasons) in enumerate(seen_answers.items(), 1):
+            # 统计该答案出现的次数
+            count = sum(1 for r in failed_records if r[0] == answer)
+            iterations_used = sorted(set(
+                r[2] for r in failed_records if r[0] == answer and r[2] is not None
+            ))
+            iter_str = ", ".join(str(it) for it in iterations_used) if iterations_used else "unknown"
+            lines.append(f"  {i}. WRONG answer: \"{answer}\" (tried {count} time(s) in iteration(s): {iter_str})")
+            for reason in reasons:
+                lines.append(f"     - Reason: {reason}")
+        lines.append("")
+        lines.append("CRITICAL: You MUST NOT give any of the above answers again. They are ALL INCORRECT.")
+        lines.append("Try a fundamentally different approach to find the correct answer.")
+
+        return "\n".join(lines)
 
     def _weighted_select_labels(
         self, entry: InstanceTrajectories, k: int = 1, allowed_labels: list[str] | None = None

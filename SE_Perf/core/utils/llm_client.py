@@ -282,6 +282,117 @@ class TrajectorySummarizer:
         self.logger = get_se_logger("traj_summarizer", emoji="📊")
         self.prompt_config = prompt_config or {}
 
+    # 粗略估算：1 token ≈ 4 字符（英文为主的混合内容）
+    _CHARS_PER_TOKEN: int = 4
+
+    def _estimate_tokens(self, text: str) -> int:
+        """粗略估算文本的 token 数。"""
+        return len(text) // self._CHARS_PER_TOKEN + 1
+
+    def _truncate_for_summary(
+        self,
+        trajectory_content: str,
+        solution_content: str,
+        problem_description: str | None,
+        system_prompt: str,
+        template_overhead: int = 600,
+    ) -> tuple[str, str]:
+        """将 trajectory_content 和 solution_content 截断/压缩到安全长度。
+
+        策略：
+        1. 先用 _compress_search_solution 压缩 <information> 和 <think> 块
+        2. 去除黑名单注入消息（⚠️ 行）
+        3. 如果仍然超长，按比例截断（trajectory 40%, solution 60%）
+
+        Returns:
+            (compressed_trajectory, compressed_solution)
+        """
+        from .traj_pool_manager import TrajPoolManager
+
+        max_input_tokens = self.llm_client.config.get("max_input_tokens", 25000)
+        max_output_tokens = self.llm_client.config.get("max_output_tokens", 5000)
+        # 安全预算：输入上限减去输出预留，再留 15% buffer
+        safe_input_tokens = int((max_input_tokens - max_output_tokens) * 0.85)
+        # 下限保护：至少保留 200 tokens 给内容
+        safe_input_tokens = max(safe_input_tokens, 500)
+
+        # 固定开销：system_prompt + template 文本 + problem_description
+        fixed_chars = (
+            len(system_prompt)
+            + template_overhead
+            + len(problem_description or "")
+        )
+        fixed_tokens = self._estimate_tokens(" " * fixed_chars)  # 避免空字符串
+        content_budget_tokens = max(safe_input_tokens - fixed_tokens, 200)
+        content_budget_chars = content_budget_tokens * self._CHARS_PER_TOKEN
+
+        # ---- 第 1 步：压缩 solution（最可能膨胀的部分）----
+        compressed_sol = TrajPoolManager._compress_search_solution(solution_content or "")
+        # 去除黑名单注入消息
+        compressed_sol = self._strip_blacklist_messages(compressed_sol)
+
+        # ---- 第 2 步：压缩 trajectory ----
+        compressed_traj = self._strip_blacklist_messages(trajectory_content or "")
+        # trajectory_content 通常是 .tra JSON，也可能包含搜索文本
+        if "<information>" in compressed_traj:
+            compressed_traj = TrajPoolManager._compress_search_solution(compressed_traj)
+
+        # ---- 第 3 步：检查是否超长，按比例截断 ----
+        total_chars = len(compressed_traj) + len(compressed_sol)
+        if total_chars > content_budget_chars:
+            # 分配预算：trajectory 40%, solution 60%
+            traj_budget = int(content_budget_chars * 0.4)
+            sol_budget = int(content_budget_chars * 0.6)
+
+            if len(compressed_traj) > traj_budget:
+                compressed_traj = (
+                    compressed_traj[:traj_budget]
+                    + "\n... [trajectory truncated for summarization]"
+                )
+            if len(compressed_sol) > sol_budget:
+                compressed_sol = (
+                    compressed_sol[:sol_budget]
+                    + "\n... [solution truncated for summarization]"
+                )
+
+            self.logger.warning(
+                f"轨迹总结输入超长（{total_chars} chars > {content_budget_chars} budget），"
+                f"已截断 traj={len(compressed_traj)} sol={len(compressed_sol)}"
+            )
+
+        return compressed_traj, compressed_sol
+
+    @staticmethod
+    def _strip_blacklist_messages(text: str) -> str:
+        """去除轨迹文本中的黑名单注入消息，减少 token 开销。
+
+        匹配并删除以下模式：
+        - ⚠️ IMPORTANT: These answers are ALL WRONG ...
+        - ⚠️ STOP: Your answer "..." has been tried ...
+        - ⚠️ Your answer "..." is STILL WRONG ...
+        """
+        if not text:
+            return text
+        # 逐行过滤：删除以 ⚠️ 开头的行，以及紧跟的指示行
+        lines = text.split("\n")
+        cleaned: list[str] = []
+        skip_until_blank = False
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("⚠️") or stripped.startswith("\u26a0"):
+                skip_until_blank = True
+                continue
+            if skip_until_blank:
+                if not stripped:
+                    skip_until_blank = False
+                    continue
+                # 如果是黑名单消息的延续行（如 "You MUST:", "1. Search using..."）
+                if stripped.startswith(("You MUST", "1.", "2.", "3.", "The search results")):
+                    continue
+                skip_until_blank = False
+            cleaned.append(line)
+        return "\n".join(cleaned)
+
     def summarize_trajectory(
         self,
         trajectory_content: str,
@@ -307,11 +418,19 @@ class TrajectorySummarizer:
 
         summarizer = TrajSummarizer(self.prompt_config)
 
-        # 获取提示词
+        # ---- 输入截断保护：确保 prompt 不超过模型上下文限制 ----
         system_prompt = summarizer.get_system_prompt()
-        user_prompt = summarizer.format_user_prompt(
+        compressed_traj, compressed_sol = self._truncate_for_summary(
             trajectory_content,
             solution_content,
+            problem_description,
+            system_prompt,
+        )
+
+        # 获取提示词（使用压缩后的内容）
+        user_prompt = summarizer.format_user_prompt(
+            compressed_traj,
+            compressed_sol,
             problem_description,
             best_solution=best_solution_text,
             target_solution=target_solution_text,

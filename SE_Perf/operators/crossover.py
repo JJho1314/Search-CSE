@@ -61,7 +61,7 @@ class CrossoverOperator(BaseOperator):
             self.logger.warning(f" crossover 算子: 缺少必要信息，无法构建 additional_requirements")
             return OperatorResult(source_labels=used)
 
-        content = self._build_additional_requirements(summary1, summary2)
+        content = self._build_additional_requirements(summary1, summary2, instance_entry)
         self.logger.info(f" crossover 算子: 构建的 additional_requirements 长度={len(content) if content else 0}")
 
         if not content:
@@ -73,7 +73,9 @@ class CrossoverOperator(BaseOperator):
             source_labels=used,
         )
 
-    def _build_additional_requirements(self, trajectory1: str, trajectory2: str) -> str:
+    def _build_additional_requirements(
+        self, trajectory1: str, trajectory2: str, instance_entry: InstanceTrajectories | None = None
+    ) -> str:
         t1 = textwrap.indent(trajectory1.strip(), "  ")
         t2 = textwrap.indent(trajectory2.strip(), "  ")
         pcfg = self.context.prompt_config or {}
@@ -100,6 +102,13 @@ class CrossoverOperator(BaseOperator):
         parts = []
         if isinstance(header, str) and header.strip():
             parts.append(header.strip())
+
+        # 注入历史错误答案黑名单
+        if instance_entry is not None:
+            failed_summary = self._build_failed_answers_summary(instance_entry)
+            if failed_summary:
+                parts.append("\n" + failed_summary)
+
         parts.append("\n### TRAJECTORY 1 SUMMARY\n" + t1)
         parts.append("\n### TRAJECTORY 2 SUMMARY\n" + t2)
         if isinstance(guidelines, str) and guidelines.strip():

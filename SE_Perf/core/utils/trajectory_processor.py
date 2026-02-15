@@ -41,6 +41,56 @@ class TrajectoryProcessor:
         tokens = re.findall(r"\b\w+\b", text.lower())
         return len(tokens)
 
+    def _compress_search_content(self, text: str, max_info_chars: int = 200) -> str:
+        """压缩包含搜索轨迹的文本内容。
+
+        将 <information>...</information> 块替换为简短摘要，
+        截断过长的 <think> 块，大幅减少 .tra 文件体积。
+
+        Args:
+            text: 原始文本内容
+            max_info_chars: <information> 块保留的最大字符数
+
+        Returns:
+            压缩后的文本
+        """
+        if not text or "<information>" not in text:
+            return text
+
+        def _compress_info_block(match: re.Match) -> str:
+            content = match.group(1)
+            doc_count = len(re.findall(r"Doc \d+\(", content))
+            char_count = len(content)
+            if max_info_chars > 0 and char_count <= max_info_chars:
+                return match.group(0)
+            summary = f"[{doc_count} docs, {char_count} chars]"
+            return f"<information>{summary}</information>"
+
+        compressed = re.sub(
+            r"<information>(.*?)</information>",
+            _compress_info_block,
+            text,
+            flags=re.DOTALL,
+        )
+
+        # 截断过长的 <think> 块
+        def _compress_think_block(match: re.Match) -> str:
+            content = match.group(1)
+            if len(content) <= 400:
+                return match.group(0)
+            head = content[:150].rstrip()
+            tail = content[-150:].lstrip()
+            return f"<think>{head}\n... [truncated {len(content)} chars] ...\n{tail}</think>"
+
+        compressed = re.sub(
+            r"<think>(.*?)</think>",
+            _compress_think_block,
+            compressed,
+            flags=re.DOTALL,
+        )
+
+        return compressed
+
     def _truncate_text(self, text: str, first_percent: float = 0.2, last_percent: float = 0.1) -> str:
         """
         使用字符百分比约束截断文本内容
@@ -136,8 +186,11 @@ class TrajectoryProcessor:
                     simplified_item = {"role": item["role"]}
                     if "content" in item:
                         content_val = item["content"]
+                        # 对包含搜索轨迹的 content 做压缩
+                        # （压缩 <information> 块和过长的 <think> 块）
+                        if isinstance(content_val, str):
+                            content_val = self._compress_search_content(content_val)
                         simplified_item["content"] = content_val
-                        # perf 模式不压缩：原始与输出的 token 相同
                         content_str = str(content_val) if content_val is not None else ""
                         tokens = self._count_tokens(content_str)
                         original_tokens += tokens

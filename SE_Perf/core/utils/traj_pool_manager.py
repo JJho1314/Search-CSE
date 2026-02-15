@@ -711,6 +711,105 @@ class TrajPoolManager:
     # -----------------------------------------------------------------------
 
     @staticmethod
+    def _strip_blacklist_messages(text: str) -> str:
+        """去除轨迹文本中的黑名单注入消息，减少 token 开销。
+
+        匹配并删除以下模式：
+        - ⚠️ IMPORTANT: These answers are ALL WRONG ...
+        - ⚠️ STOP: Your answer "..." has been tried ...
+        - ⚠️ Your answer "..." is STILL WRONG ...
+        以及黑名单消息后附带的指示行（You MUST:, 1., 2., 3. 等）。
+        """
+        if not text:
+            return text
+        lines = text.split("\n")
+        cleaned: list[str] = []
+        skip_until_blank = False
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("⚠️") or stripped.startswith("\u26a0"):
+                skip_until_blank = True
+                continue
+            if skip_until_blank:
+                if not stripped:
+                    skip_until_blank = False
+                    continue
+                # 黑名单消息的延续行
+                if stripped.startswith(("You MUST", "1.", "2.", "3.", "The search results")):
+                    continue
+                skip_until_blank = False
+            cleaned.append(line)
+        return "\n".join(cleaned)
+
+    @staticmethod
+    def _compress_search_solution(solution: str, max_info_chars: int = 200) -> str:
+        """压缩 Search-R1 风格的多轮搜索轨迹 solution 文本。
+
+        策略：
+        - 保留 <think>...</think> 推理（截断过长的推理块）
+        - 保留 <search>query</search> 原文
+        - 将 <information>...</information> 块压缩为 "[搜索结果: N 个文档, 约 M 字符]"
+        - 保留 <answer>...</answer> 原文
+        - 保留 invalid action 提示原文
+        - 去除黑名单注入消息（⚠️ 行），大幅减少冗余 token
+        - 总体保留轨迹结构可读性，大幅减少 token 数
+
+        Args:
+            solution: 原始 solution 文本
+            max_info_chars: <information> 块保留的最大字符数（0 表示全部替换为摘要）
+
+        Returns:
+            压缩后的 solution 文本
+        """
+        import re as _re
+
+        if not solution:
+            return solution
+
+        compressed = solution
+
+        # ---- 去除黑名单注入消息 ----
+        compressed = TrajPoolManager._strip_blacklist_messages(compressed)
+
+        if "<information>" not in compressed:
+            return compressed
+
+        def _compress_info_block(match: _re.Match) -> str:
+            content = match.group(1)
+            # 统计文档数量
+            doc_count = len(_re.findall(r"Doc \d+\(", content))
+            char_count = len(content)
+            if max_info_chars > 0 and char_count <= max_info_chars:
+                return match.group(0)  # 短的保留原样
+            summary = f"[{doc_count} docs, {char_count} chars]"
+            return f"<information>{summary}</information>"
+
+        compressed = _re.sub(
+            r"<information>(.*?)</information>",
+            _compress_info_block,
+            compressed,
+            flags=_re.DOTALL,
+        )
+
+        # 截断过长的 <think> 块（保留首尾各 150 字符）
+        def _compress_think_block(match: _re.Match) -> str:
+            content = match.group(1)
+            if len(content) <= 400:
+                return match.group(0)
+            head = content[:150].rstrip()
+            tail = content[-150:].lstrip()
+            return f"<think>{head}\n... [truncated {len(content)} chars] ...\n{tail}</think>"
+
+        compressed = _re.sub(
+            r"<think>(.*?)</think>",
+            _compress_think_block,
+            compressed,
+            flags=_re.DOTALL,
+        )
+
+        return compressed
+
+    @staticmethod
     def format_entry(data: Any, include_keys: set[str] | None = None) -> str:
         """格式化轨迹条目为可读文本。
 
@@ -807,8 +906,10 @@ class TrajPoolManager:
                         continue
                     key_line = f"{indent_str(level)}{k}:"
                     if str(k) == "solution" and isinstance(v, str):
+                        # 对包含搜索轨迹的 solution 做压缩
+                        compressed_v = TrajPoolManager._compress_search_solution(v)
                         lines.append(key_line)
-                        lines.append(f"```\n{v}\n```")
+                        lines.append(f"```\n{compressed_v}\n```")
                     elif isinstance(v, (dict, list)) or (isinstance(v, str) and "\n" in v):
                         lines.append(key_line)
                         lines.append(fmt_value(v, level + 1))

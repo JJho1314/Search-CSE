@@ -76,7 +76,7 @@ class ReflectionRefineOperator(BaseOperator):
             self.logger.warning(f" reflection_refine: 缺少必要信息，无法构建 additional_requirements")
             return OperatorResult(source_labels=used_labels)
 
-        content = self._build_additional_requirements(src_summary)
+        content = self._build_additional_requirements(src_summary, instance_entry)
         self.logger.info(f" reflection_refine: 构建的 additional_requirements 长度={len(content) if content else 0}")
 
         if not content:
@@ -88,9 +88,13 @@ class ReflectionRefineOperator(BaseOperator):
             source_labels=used_labels,
         )
 
-    def _build_additional_requirements(self, source_summary: str) -> str:
+    def _build_additional_requirements(
+        self, source_summary: str, instance_entry: InstanceTrajectories | None = None
+    ) -> str:
         """
         构造带有反思与改进要求的 additional_requirements 文本。
+
+        在源轨迹摘要之前注入历史错误答案黑名单，确保模型不会重复已知的错误。
         """
         src = textwrap.indent((source_summary or "").strip(), "  ")
         pcfg = self.context.prompt_config or {}
@@ -116,6 +120,13 @@ class ReflectionRefineOperator(BaseOperator):
         parts = []
         if isinstance(header, str) and header.strip():
             parts.append(header.strip())
+
+        # 注入历史错误答案黑名单
+        if instance_entry is not None:
+            failed_summary = self._build_failed_answers_summary(instance_entry)
+            if failed_summary:
+                parts.append("\n" + failed_summary)
+
         parts.append("\n### SOURCE TRAJECTORY SUMMARY\n" + src)
         if isinstance(guidelines, str) and guidelines.strip():
             parts.append("\n" + guidelines.strip())
