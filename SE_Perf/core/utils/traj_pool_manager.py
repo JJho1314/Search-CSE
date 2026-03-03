@@ -742,7 +742,11 @@ class TrajPoolManager:
         return "\n".join(cleaned)
 
     @staticmethod
-    def _compress_search_solution(solution: str, max_info_chars: int = 200) -> str:
+    def _compress_search_solution(
+        solution: str,
+        max_info_chars: int = 200,
+        max_total_chars: int = 1500,
+    ) -> str:
         """压缩 Search-R1 风格的多轮搜索轨迹 solution 文本。
 
         策略：
@@ -753,10 +757,12 @@ class TrajPoolManager:
         - 保留 invalid action 提示原文
         - 去除黑名单注入消息（⚠️ 行），大幅减少冗余 token
         - 总体保留轨迹结构可读性，大幅减少 token 数
+        - 压缩后若仍超过 max_total_chars，只保留最后几轮搜索
 
         Args:
             solution: 原始 solution 文本
             max_info_chars: <information> 块保留的最大字符数（0 表示全部替换为摘要）
+            max_total_chars: 压缩后的最大总字符数硬上限，超出则截断保留尾部
 
         Returns:
             压缩后的 solution 文本
@@ -772,6 +778,9 @@ class TrajPoolManager:
         compressed = TrajPoolManager._strip_blacklist_messages(compressed)
 
         if "<information>" not in compressed:
+            # 即使没有 <information>，也需要检查总长度
+            if max_total_chars > 0 and len(compressed) > max_total_chars:
+                compressed = "... [earlier rounds truncated] ...\n" + compressed[-max_total_chars:]
             return compressed
 
         def _compress_info_block(match: _re.Match) -> str:
@@ -807,10 +816,18 @@ class TrajPoolManager:
             flags=_re.DOTALL,
         )
 
+        # ---- 硬上限：若压缩后仍超限，保留尾部（最近的搜索轮次更有价值）----
+        if max_total_chars > 0 and len(compressed) > max_total_chars:
+            compressed = "... [earlier rounds truncated] ...\n" + compressed[-max_total_chars:]
+
         return compressed
 
     @staticmethod
-    def format_entry(data: Any, include_keys: set[str] | None = None) -> str:
+    def format_entry(
+        data: Any,
+        include_keys: set[str] | None = None,
+        compact: bool = False,
+    ) -> str:
         """格式化轨迹条目为可读文本。
 
         接受 InstanceTrajectories 或兼容的 dict（向后兼容）。
@@ -819,6 +836,10 @@ class TrajPoolManager:
         Args:
             data: InstanceTrajectories 对象或原始 dict。
             include_keys: 若非 None，仅格式化顶层中属于此集合的键。
+            compact: 若为 True，只输出 summary 摘要中对 LLM 有用的字段
+                     （approach_summary, search_queries, information_found, answer_given），
+                     去掉 solution 原文、metric、artifacts、meta 等元数据，
+                     大幅减少 token 消耗。
         """
         import re
 
@@ -880,7 +901,13 @@ class TrajPoolManager:
         else:
             return ""
 
-        # ---- 格式化 ----
+        header = str(chosen_label or latest_key).strip()
+
+        # ---- compact 模式：只输出 summary 中对 LLM 有用的字段 ----
+        if compact:
+            return TrajPoolManager._format_entry_compact(latest_data, header)
+
+        # ---- 完整格式化 ----
         def indent_str(level: int) -> str:
             return "  " * level
 
@@ -927,6 +954,55 @@ class TrajPoolManager:
                 return "\n".join(lines)
             return str(val)
 
-        header = str(chosen_label or latest_key).strip()
         body = fmt_value(latest_data, 0)
         return f"{header}\n{body}".strip() if header else body
+
+    @staticmethod
+    def _format_entry_compact(data: dict, header: str) -> str:
+        """compact 模式的轨迹格式化：只输出 summary 摘要中的关键字段。
+
+        提取 summary 中的 approach_summary、search_queries、information_found、
+        answer_given，去掉 solution 原文、metric、artifacts、meta 等元数据。
+
+        Args:
+            data: 轨迹的 dict 表示。
+            header: 轨迹标签/标题。
+
+        Returns:
+            精简后的格式化文本。
+        """
+        summary = data.get("summary")
+        if not summary:
+            # 没有 summary，回退到只输出 answer
+            solution = data.get("solution", "")
+            import re as _re
+            m = _re.search(r"<answer>\s*(.*?)\s*</answer>", solution, _re.DOTALL)
+            answer = m.group(1).strip() if m else "N/A"
+            return f"{header}\n  answer_given: {answer}".strip()
+
+        if isinstance(summary, str):
+            # summary 是纯文本，直接返回
+            return f"{header}\n{summary}".strip()
+
+        # summary 是 dict，提取关键字段
+        useful_keys = [
+            "approach_summary",
+            "search_queries",
+            "information_found",
+            "answer_given",
+        ]
+        lines: list[str] = []
+        if header:
+            lines.append(header)
+        for key in useful_keys:
+            val = summary.get(key)
+            if val is None:
+                continue
+            if isinstance(val, list):
+                items = "\n".join(f"    - {item}" for item in val)
+                lines.append(f"  {key}:\n{items}")
+            elif isinstance(val, str):
+                lines.append(f"  {key}: {val}")
+            else:
+                lines.append(f"  {key}: {val}")
+        return "\n".join(lines)

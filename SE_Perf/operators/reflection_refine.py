@@ -23,6 +23,9 @@ class ReflectionRefineOperator(BaseOperator):
     def get_name(self) -> str:
         return "reflection_refine"
 
+    # failed answers 数量超过此阈值时，自动使用 compact 模式格式化轨迹摘要
+    COMPACT_THRESHOLD = 5
+
     def run_for_instance(
         self,
         step_config: StepConfig,
@@ -38,6 +41,12 @@ class ReflectionRefineOperator(BaseOperator):
 
         self.logger.info(f" reflection_refine 算子: 开始处理 instance={instance_name}, has_problem_description={bool(problem_description)}")
 
+        # 统计历史失败答案数量，决定是否使用 compact 模式
+        n_failed = self._count_failed_answers(instance_entry)
+        use_compact = n_failed >= self.COMPACT_THRESHOLD
+        if use_compact:
+            self.logger.info(f" reflection_refine: {n_failed} failed answers >= {self.COMPACT_THRESHOLD}, 使用 compact 模式")
+
         # 若未提供输入标签，进行线性加权采样选择源轨迹
         chosen = self._select_source_labels(instance_entry, step_config, required_n=1)
         self.logger.info(f" reflection_refine 算子: chosen labels={chosen}")
@@ -45,7 +54,7 @@ class ReflectionRefineOperator(BaseOperator):
         if chosen:
             traj = instance_entry.trajectories.get(chosen[0])
             if traj is not None:
-                src_summary = self._format_entry(InstanceTrajectories(trajectories={chosen[0]: traj}))
+                src_summary = self._format_entry(InstanceTrajectories(trajectories={chosen[0]: traj}), compact=use_compact)
                 used_labels = [chosen[0]]
                 self.logger.info(f" reflection_refine: 从 chosen 选择了轨迹，生成摘要")
             else:
@@ -57,7 +66,7 @@ class ReflectionRefineOperator(BaseOperator):
             if keys:
                 traj = instance_entry.trajectories.get(keys[0])
                 if traj is not None:
-                    src_summary = self._format_entry(InstanceTrajectories(trajectories={keys[0]: traj}))
+                    src_summary = self._format_entry(InstanceTrajectories(trajectories={keys[0]: traj}), compact=use_compact)
                     used_labels = [keys[0]]
                     self.logger.info(f" reflection_refine: 从采样选择轨迹，生成摘要")
                 else:
@@ -68,7 +77,7 @@ class ReflectionRefineOperator(BaseOperator):
         # 最后回退：使用最新条目摘要
         if not src_summary:
             self.logger.info(f" reflection_refine: src_summary 仍为空，使用整个 instance_entry 作为回退")
-            src_summary = self._format_entry(instance_entry)
+            src_summary = self._format_entry(instance_entry, compact=use_compact)
 
         self.logger.info(f" reflection_refine: has_problem_description={bool(problem_description)}, has_src_summary={bool(src_summary)}")
 

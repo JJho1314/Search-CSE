@@ -122,32 +122,21 @@ prompt_config:
 
   reflection_refine:
     header: |
-      IMPORTANT: Your previous attempt gave a WRONG answer. The previous attempt is shown below.
-      You MUST NOT repeat the same wrong answer. The answer shown below is INCORRECT.
-      Try completely different search queries and reasoning to find the correct answer.
+      Your previous attempt gave a WRONG answer. You must reflect on what went wrong and try a fundamentally different approach.
     guidelines: |
-      Rules:
-      1. The answer in the previous attempt is WRONG — NEVER give that same answer again.
-      2. The information that led to that wrong answer may also be wrong — do NOT trust it.
-      3. Use DIFFERENT search queries than what was tried before. Search for each entity separately.
-      4. Carefully check dates, names, and facts in the search results before concluding.
-      5. Put your final answer inside <answer>...</answer> tags.
-      6. IMPORTANT: Your answer MUST be a short, direct entity name or value — NOT a full sentence. For example: <answer> Giuseppe Cesari </answer>, NOT <answer> Giuseppe Cesari lived longer </answer>.
+      1. Diagnose: Identify WHY the previous attempt failed — wrong entity? wrong time period? misread the question?
+      2. Do NOT trust prior search results blindly — verify key facts with NEW, differently-worded queries.
+      3. Try alternative angles: search for each entity separately, use alternative names/aliases/titles, or decompose the question into sub-questions.
+      4. Cross-check: if you find an answer, search once more to confirm it before committing.
 
   crossover:
     header: |
-      IMPORTANT: Two previous attempts are shown below. BOTH gave WRONG answers.
-      You MUST NOT repeat either wrong answer. Both answers shown below are INCORRECT.
-      Use any useful search results from both attempts, but reach a DIFFERENT conclusion.
+      Two previous attempts BOTH gave WRONG answers. Your goal is to synthesize a BETTER answer by combining the strengths of both attempts while avoiding their shared mistakes.
     guidelines: |
-      Rules:
-      1. Both answers below are WRONG — NEVER give either of them as your answer.
-      2. The information that led to those wrong answers may be incorrect — verify everything.
-      3. Look at what useful facts each attempt found, but do NOT trust their conclusions.
-      4. Try NEW search queries to find information that both attempts missed.
-      5. Carefully check dates, names, and facts before concluding.
-      6. Put your final answer inside <answer>...</answer> tags.
-      7. IMPORTANT: Your answer MUST be a short, direct entity name or value — NOT a full sentence. For example: <answer> Giuseppe Cesari </answer>, NOT <answer> Giuseppe Cesari lived longer </answer>.
+      1. Combine useful facts: Extract the most reliable facts each attempt discovered (e.g., one found the correct entity, the other found the correct time period). Merge them into a coherent reasoning chain.
+      2. Avoid shared weaknesses: If both attempts failed on the same sub-question, you MUST try a completely new search angle for that part.
+      3. Fill gaps: Identify what information BOTH attempts missed, and search for it with new queries.
+      4. Cross-check: Verify your synthesized answer with at least one confirming search before committing.
 
 max_iterations: 1 # This config defines a single, multi-step iteration.
 

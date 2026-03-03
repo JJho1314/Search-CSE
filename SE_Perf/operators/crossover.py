@@ -18,6 +18,9 @@ class CrossoverOperator(BaseOperator):
     def get_name(self) -> str:
         return "crossover"
 
+    # failed answers 数量超过此阈值时，自动使用 compact 模式格式化轨迹摘要
+    COMPACT_THRESHOLD = 5
+
     def run_for_instance(
         self,
         step_config: StepConfig,
@@ -30,6 +33,12 @@ class CrossoverOperator(BaseOperator):
 
         从 instance_entry 中选择两条轨迹，生成交叉策略的 additional_requirements。
         """
+
+        # 统计历史失败答案数量，决定是否使用 compact 模式
+        n_failed = self._count_failed_answers(instance_entry)
+        use_compact = n_failed >= self.COMPACT_THRESHOLD
+        if use_compact:
+            self.logger.info(f" crossover: {n_failed} failed answers >= {self.COMPACT_THRESHOLD}, 使用 compact 模式")
 
         # 自适应选择两个源轨迹（不重复）
         chosen = self._select_source_labels(instance_entry, step_config, required_n=2)
@@ -52,8 +61,8 @@ class CrossoverOperator(BaseOperator):
             self.logger.warning(f" crossover 算子: traj1 或 traj2 为 None，跳过")
             return OperatorResult(source_labels=used)
 
-        summary1 = self._format_entry(InstanceTrajectories(trajectories={pick1 or "iter1": traj1}))
-        summary2 = self._format_entry(InstanceTrajectories(trajectories={pick2 or "iter2": traj2}))
+        summary1 = self._format_entry(InstanceTrajectories(trajectories={pick1 or "iter1": traj1}), compact=use_compact)
+        summary2 = self._format_entry(InstanceTrajectories(trajectories={pick2 or "iter2": traj2}), compact=use_compact)
 
         self.logger.info(f" crossover 算子: has_problem_description={bool(problem_description)}, has_summary1={bool(summary1)}, has_summary2={bool(summary2)}")
 

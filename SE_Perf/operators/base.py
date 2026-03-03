@@ -218,8 +218,40 @@ class BaseOperator(abc.ABC):
             self.logger.error(f"LLM API调用失败: {e}")
             return ""
             
-    def _format_entry(self, entry: InstanceTrajectories) -> str:
-        return TrajPoolManager.format_entry(entry)
+    def _format_entry(self, entry: InstanceTrajectories, compact: bool = False) -> str:
+        return TrajPoolManager.format_entry(entry, compact=compact)
+
+    def _count_failed_answers(
+        self,
+        instance_entry: InstanceTrajectories,
+    ) -> int:
+        """统计 instance_entry 中去重后的失败答案数量。
+
+        用于判断是否需要启用 compact 模式来节省 token。
+        """
+        seen: set[str] = set()
+        for _key, traj in instance_entry.trajectories.items():
+            metric = traj.metric
+            extras = traj.extras or {}
+            artifacts = extras.get("artifacts") or {}
+            if isinstance(traj.summary, dict):
+                artifacts = artifacts or traj.summary.get("artifacts") or {}
+            is_failed = False
+            if metric is not None and metric == 0.0:
+                is_failed = True
+            if artifacts.get("em_match") is False or artifacts.get("subem_match") is False:
+                is_failed = True
+            if not is_failed:
+                continue
+            answer = artifacts.get("extracted_answer") or ""
+            if not answer:
+                sol = traj.solution or ""
+                m = re.search(r"<answer>\s*(.*?)\s*</answer>", sol, re.DOTALL)
+                if m:
+                    answer = m.group(1).strip()
+            if answer:
+                seen.add(answer)
+        return len(seen)
 
     def _build_failed_answers_summary(
         self,
@@ -289,24 +321,16 @@ class BaseOperator(abc.ABC):
         if not seen_answers:
             return ""
 
-        # 构建摘要
-        lines: list[str] = []
-        lines.append("### HISTORICAL FAILED ANSWERS (DO NOT REPEAT)")
-        lines.append(f"The following answers have been tried in {len(failed_records)} previous attempt(s) and were ALL WRONG:")
-        lines.append("")
-        for i, (answer, reasons) in enumerate(seen_answers.items(), 1):
-            # 统计该答案出现的次数
-            count = sum(1 for r in failed_records if r[0] == answer)
-            iterations_used = sorted(set(
-                r[2] for r in failed_records if r[0] == answer and r[2] is not None
-            ))
-            iter_str = ", ".join(str(it) for it in iterations_used) if iterations_used else "unknown"
-            lines.append(f"  {i}. WRONG answer: \"{answer}\" (tried {count} time(s) in iteration(s): {iter_str})")
-            for reason in reasons:
-                lines.append(f"     - Reason: {reason}")
-        lines.append("")
-        lines.append("CRITICAL: You MUST NOT give any of the above answers again. They are ALL INCORRECT.")
-        lines.append("Try a fundamentally different approach to find the correct answer.")
+        # 构建精简摘要：只列出错误答案，不含冗余的 iteration/reason 细节
+        unique_answers = list(seen_answers.keys())
+        answer_list = ", ".join(f'"{a}"' for a in unique_answers)
+
+        lines: list[str] = [
+            "### WRONG ANSWERS (DO NOT REPEAT ANY)",
+            answer_list,
+            f"All {len(unique_answers)} answers above are INCORRECT. You MUST give a DIFFERENT answer.",
+            "Try a fundamentally different approach to find the correct answer.",
+        ]
 
         return "\n".join(lines)
 

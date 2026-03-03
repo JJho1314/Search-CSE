@@ -6,6 +6,12 @@ python scripts/convert_search_r1_parquet.py \
 
 uv run python SE_Perf/perf_run.py     --config ./configs/search_r1.yaml     --instance ./instances/search_r1_bamboogle/test_0.json
 
+cd /data/user/rli112/junjie/workspace/LLM_Agent/Search-R1/
+conda activate retriever
+bash retrieval_launch.sh 
+
+cd /data/user/rli112/junjie/workspace/LLM_Agent/nanoCSE
+uv run --no-sync bash scripts/launch_vllm_server.sh
 # 并行 4 workers
 uv run python SE_Perf/batch_run.py \
     --config configs/search_r1.yaml \
